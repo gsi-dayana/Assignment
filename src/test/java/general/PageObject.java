@@ -30,6 +30,7 @@ public class PageObject {
         PageFactory.initElements(this.getDriver(), this);
         setWaitTime(20);
         setWait(new WebDriverWait(this.getDriver(), this.getWaitTime()));
+        setChoiceItems(new HashMap<>());
     }
 
     public void setImage(WebElement element) {
@@ -142,6 +143,30 @@ public class PageObject {
         Setup.getWait().waitForLoading((Integer) Setup.getTimeouts().get("implicit"));
     }
 
+    public void sendDataToInputByWebElement(WebElement element, String data) {
+        clear_element_text(element);
+        Setup.getActions().moveToElement(element).build().perform();
+        Setup.getActions().sendKeys(element, data).build().perform();
+    }
+
+    public void interactAndRandomSelectFromDropDown(String id_dropdown, String id_options) {
+        try {
+            WebElement element = getWebElement(By.xpath("//input[@id='" + id_dropdown +"' and @role='combobox']"));
+            Setup.getActions().moveToElement(element).build().perform();
+            Setup.getActions().click(element).build().perform();
+            String xpath = "//div[@role='listbox' and @id='" + id_options + "']/ancestor::div[contains(@class, "
+                    + "'ant-select-dropdown')]/descendant::div[@class='ant-select-item-option-content']";
+            List<WebElement> select_elements = getWebElements(By.xpath(xpath));
+            WebElement option_element = select_elements.get(
+                    getFaker().number().numberBetween(3, 5));
+            Setup.getActions().moveToElement(option_element).build().perform();
+            Setup.getWait().thread(750);
+            Setup.getActions().click(option_element).build().perform();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public String getCurrentUrl() {
         return this.getDriver().getCurrentUrl();
     }
@@ -213,9 +238,9 @@ public class PageObject {
         Setup.getWait().thread(500);
         int y_pos = Integer.parseInt(Setup.timeouts.get("script").toString());
         if (element != null)
-            y_pos = element.getLocation().y;
+            y_pos = element.getLocation().y / 2;
 
-        String script = "arguments[0].scrollTo(0, " + y_pos + ");";
+        String script = "arguments[0].scrollBy(0, " + y_pos + ");";
         Setup.getJsExecutor().executeScript(script, getWebElement(By.xpath(form)));
         Setup.getWait().thread(500);
     }
@@ -288,6 +313,7 @@ public class PageObject {
         }
     }
 
+    @SuppressWarnings("unused")
     public void selectDropdown(String fieldName,By dropdown,By options) {
         try {
             Setup.getWait().thread(150);

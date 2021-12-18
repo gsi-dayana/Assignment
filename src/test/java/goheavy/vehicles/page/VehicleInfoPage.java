@@ -301,7 +301,7 @@ public class VehicleInfoPage extends TabsPage {
     }
 
     public boolean systemOpensAddVehicleView() {
-        Setup.getWait().thread(5000);
+        Setup.getWait().thread(1500);
         waitForSpinningElementDisappear();
 
         try {

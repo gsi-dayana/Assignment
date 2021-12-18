@@ -31,9 +31,16 @@ public class DriverStepDefinition {
 		}
 	}
 
-	@When("insert valid data")
-	public void insert_valid_data() {
-			driverSteps.addDriver();
+	@When("insert valid data for {string}")
+	public void insert_valid_data(String update) {
+		boolean is_update = false;
+		if (update.equals("Update"))
+			is_update = true;
+		try {
+			driverSteps.addDriver(is_update);
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
 	}
 
 	@When("clicks on the \"Add\" button")

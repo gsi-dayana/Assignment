@@ -30,8 +30,9 @@ public class DriverStep extends Steps{
 	public void clickOnAddDriver() {
 		driverPage.clicksOnAddDriverButton();
 	}
-	public void addDriver() {
-		Assert.assertTrue(driverPage.insertValidData());
+
+	public void addDriver(boolean update) {
+		Assert.assertTrue(driverPage.insertValidData(update));
 	}
 
 	public void checkNewDriver() {

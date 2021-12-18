@@ -1,8 +1,10 @@
 package goheavy.driver.pages;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadLocalRandom;
+import general.InputType;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -68,11 +70,11 @@ public class DriverPage extends PageObject {
 	}
 	
 	public void waitAdditionalTime() {
-		Setup.getWait().thread(5000);
+		Setup.getWait().thread(1500);
 	}
 	
 	public void waitAdditionalShortTime() {
-		Setup.getWait().thread(1000);
+		Setup.getWait().thread(500);
 	}
 
 	public void clicksOnAddDriverButton()
@@ -107,41 +109,156 @@ public class DriverPage extends PageObject {
 		formElements.put("dlIssuedDate", getElement("dlIssuedDate"));
 		formElements.put("dlExpirationDate", getElement("dlExpirationDate"));
 		formElements.put("dlClassType", getElement("dlClassType"));
-
 	}
 
-	public boolean insertValidData() {
+	public boolean insertValidData(boolean update) {
 		try {
 			waitForSpinningElementDisappear();
-			String avatar = (String) Setup.getValueStore("avatar");
-			getWebElement(driverPhotoLocator).sendKeys(avatar);
-			sendDataToInput(getElement("firstName"), getFaker().name().firstName(), null, getForm());
-			sendDataToInput(getElement("lastName"), getFaker().name().lastName(), null, getForm());
-			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			sendDataToInput(getElement("birthAt"), formatter.format(getFaker().date().birthday(21, 80)), null, getForm());
-			sendDataToInput(getElement("birthAt"), null, Keys.RETURN, getForm());
-			sendDataToInput(getElement("experienceYear"), String.valueOf(getFaker().number().numberBetween(3, 11)), null, getForm());
-			sendDataToInput(getElement("mobilePhone"), getFaker().phoneNumber().cellPhone(), null, getForm());
-			sendDataToInput(getElement("mobilePhone"),null , Keys.RETURN, getForm());
-			sendDataToInput(getElement("email"), getFaker().internet().emailAddress(), null, getForm());
-			selectDropdown("T-Shirt Size", By.id("tshirt"), By.id("tshirtOptions"));
-			//interactDropdown("tShirtSize","tShirtSize_list");
-			//interactWithDropDownElement(tshirtSizeLocator,true,tshirtOptionsLocator);
-			sendDataToInput(getElement("address"), getFaker().address().streetAddress() + getFaker().address().streetAddressNumber() + getFaker().address().streetName(), null, getForm());
-			sendDataToInput(getElement("addressZipCode"), getFaker().address().zipCode(), null, getForm());
-			sendDataToInput(getElement("addressCity"), getFaker().address().city(), null, getForm());
-			selectDropdown("State", By.id("addressStateId"), By.id("addressStateId_list"));
-			getWebElement(driverLicenseFrontLocator).sendKeys(avatar);
-			getWebElement(driverLicenseBackLocator).sendKeys(avatar);
-			sendDataToInput(getElement("dlNumber"), getFaker().number().digits(7), null, getForm());
-			sendDataToInput(getElement("dlIssuedDate"), formatter.format(getFaker().date().past(1, TimeUnit.DAYS)), null, getForm());
-			sendDataToInput(getElement("dlExpirationDate"), formatter.format(getFaker().date().future(2, TimeUnit.DAYS)), null, getForm());
-			selectDropdown("DL Class Type", By.id("dlClassType"), By.id("dlClassType_list"));
-			//interactDropdown("dlClassType","dlClassType_list");
-			clicks_button_done();
+			waitAdditionalTime();
+
+			String title = "Driver Photo (including shoulders)";
+			setImageImproved(title, null);
+			//acceptImage(title); <- Using in Fleet Owner Driver Creation Process
+
+			String formId = "driver-form";
+
+			String name = getFaker().name().firstName();
+			Setup.setKeyValueStore("driverName", name);
+
+			if (update) {
+				sendDataToInputByWebElement(getWebElement(By.id("firstName")), (String) Setup.getValueStore("driverName"));
+				sendDataToInputByWebElement(getWebElement(By.id("lastName")), getFaker().name().lastName());
+				sendDataToInputByWebElement(getWebElement(By.id("experienceYear")),
+						String.valueOf(getFaker().number().numberBetween(3, 8)));
+				sendDataToInputByWebElement(getWebElement(By.id("email")), getFaker().internet().emailAddress());
+
+				//Setting GoHeavy Ready Status
+				Setup.getActions().moveToElement(getWebElement(By.xpath("//input[@id='status']"))).build().perform();
+				waitAdditionalShortTime();
+				Setup.getActions().click(getWebElement(By.xpath("//input[@id='status']"))).build().perform();
+				waitAdditionalShortTime();
+				Setup.getActions().moveToElement(getWebElement(By.xpath("//div[text()='GoHeavy Ready']"))).build().perform();
+				waitAdditionalShortTime();
+				Setup.getActions().click(getWebElement(By.xpath("//div[text()='GoHeavy Ready']"))).build().perform();
+
+				sendDataToInputByWebElement(getWebElement(By.id("address")), getFaker().address().streetName());
+				sendDataToInputByWebElement(getWebElement(By.id("addressCity")), getFaker().address().cityName());
+
+				formScrollImproved(formId, Integer.parseInt(Setup.getTimeouts().get("pageLoad").toString()));
+
+				title = "Driver's License Photo (Front)";
+				setImageImproved(title, null);
+				title = "Driver's License Photo (Back)";
+				setImageImproved(title, null);
+
+				String xpath = "//*[@type='submit']";
+				Setup.getActions().click(getWebElement(By.xpath(xpath))).build().perform();
+			}
+
+			sendDataToInputImproved("First Name", (String) Setup.getValueStore("driverName"), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Last Name", getFaker().name().lastName(), null,  InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			int min_val = 22;
+			int max_val = 55;
+
+			ThreadLocalRandom tlr = ThreadLocalRandom.current();
+			int randomNum = tlr.nextInt(min_val, max_val + 1);
+
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			String date_compare = dtf.format(LocalDateTime.now().plusYears(randomNum * -1));
+
+			sendDataToInputImproved("Birth Date", date_compare, null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+			sendDataToInputImproved("Birth Date", null, Keys.RETURN,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Experience", String.valueOf(getFaker().number().numberBetween(3, 8)), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Mobile", "53" + getFaker().number().digits(8), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Email", getFaker().internet().emailAddress(), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			scrollToWebElement(getWebElement(By.id("tShirtSize")), "//div[contains(@class, 'ContentDiv')]");
+
+			//tShirtSize
+			//tShirtSize_list
+			interactAndRandomSelectFromDropDown("tShirtSize", "tShirtSize_list");
+
+			sendDataToInputImproved("ZIP Code", getFaker().address().zipCode(), null,  InputType.input, true, formId, 210);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("Address", getFaker().address().streetName(), null,  InputType.textarea, true, formId, 210);
+			waitAdditionalShortTime();
+
+			sendDataToInputImproved("City", getFaker().address().cityName(), null,  InputType.input, true, formId, 210);
+			waitAdditionalShortTime();
+
+			scrollToWebElement(getWebElement(By.id("addressStateId")), "//div[contains(@class, 'ContentDiv')]");
+
+			//Setup.getWait().thread(60000);
+
+			//addressStateId
+			//addressStateId_list
+			interactAndRandomSelectFromDropDown("addressStateId", "addressStateId_list");
+
+			//Driver's License Photo (Front)
+			title = "Driver's License Photo (Front)";
+			setImageImproved(title, null);
+
+			//Driver's License Photo (Back)
+			title = "Driver's License Photo (Back)";
+			setImageImproved(title, null);
+
+			sendDataToInputImproved("Driver's License (DL) Number", "1" + getFaker().number().digits(6), null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+
+			scrollToWebElement(getWebElement(By.id("dlClassType")), "//div[contains(@class, 'ContentDiv')]");
+
+			//dlClassType
+			//dlClassType_list
+			interactAndRandomSelectFromDropDown("dlClassType", "dlClassType_list");
+
+			min_val = 2;
+			max_val = 5;
+
+			randomNum = tlr.nextInt(min_val, max_val + 1);
+
+			dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+			date_compare = dtf.format(LocalDateTime.now().plusMonths((randomNum * -1)));
+
+			sendDataToInputImproved("DL Issued Date", date_compare, null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+			sendDataToInputImproved("DL Issued Date", null, Keys.RETURN,
+					InputType.input, true, formId, 40);
+
+			date_compare = dtf.format(LocalDateTime.now().plusMonths((randomNum)));
+
+			sendDataToInputImproved("DL Expiration Date", date_compare, null,
+					InputType.input, true, formId, 40);
+			waitAdditionalShortTime();
+			sendDataToInputImproved("DL Expiration Date", null, Keys.RETURN,
+					InputType.input, true, formId, 40);
+
+			String xpath = "//*[@type='submit']";
+			Setup.getActions().click(getWebElement(By.xpath(xpath))).build().perform();
+
 			return true;
 		} catch(Exception e) {
-			Assert.fail(e.getMessage());
+			System.out.println(e.getMessage());
 			return false;
 		}
 	}

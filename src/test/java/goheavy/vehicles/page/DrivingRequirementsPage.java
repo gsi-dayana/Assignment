@@ -57,42 +57,42 @@ public class DrivingRequirementsPage extends TabsPage {
         sendDataToInput(getWebElement(By.id("insurancePolicyNo")),
                 getFaker().number().digits(12), null, getStepThreeForm());
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
 
         sendDataToInput(getWebElement(By.id("insuranceCertificateCompany")),
                 getFaker().name().firstName(), null, getStepThreeForm());
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
 
         introduceDate();
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
 
         sendDataToInput(getWebElement(By.id("insuranceRenewal")),
                 getFaker().name().firstName(), null, getStepThreeForm());
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
 
         sendDataToInput(getWebElement(By.id("licensePlateNo")),
                 getFaker().number().digits(6), null, getStepThreeForm());
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
 
         managePlateState();
 
         scrollToWebElement(null, getStepThreeForm());
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
 
         setImage(getWebElement(By.xpath("//label[@title='License Plate Photo']/ancestor::div[contains(@class, "
                 + "'ant-form-item')]/descendant::input[@type='file']")));
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
 
         setImage(getWebElement(By.xpath("//label[@title='Vehicle Registration Sticker']/ancestor::div[contains(@class, "
                 + "'ant-form-item')]/descendant::input[@type='file']")));
 
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(150);
     }
 
     public void introduceDate() {

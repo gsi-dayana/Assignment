@@ -11,7 +11,7 @@ Feature: Add a new Driver
   Scenario: Successfully create a new Driver
     Given the user is on the "Driver List" view
     And clicks on the "Add Driver" button
-    When insert valid data
+    When insert valid data for "Create"
     And clicks on the "Add" button
     Then the system will add the new driver into the Driver List
     And will redirect to the previous view
