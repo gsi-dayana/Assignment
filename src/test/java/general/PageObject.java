@@ -235,7 +235,7 @@ public class PageObject {
     }
 
     public  void scrollToWebElement(WebElement element, String form) {
-        Setup.getWait().thread(500);
+        Setup.getWait().thread(250);
         int y_pos = Integer.parseInt(Setup.timeouts.get("script").toString());
         if (element != null)
             y_pos = element.getLocation().y / 2;

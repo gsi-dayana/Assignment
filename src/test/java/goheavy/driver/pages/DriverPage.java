@@ -196,10 +196,10 @@ public class DriverPage extends PageObject {
 			//tShirtSize_list
 			interactAndRandomSelectFromDropDown("tShirtSize", "tShirtSize_list");
 
-			sendDataToInputImproved("ZIP Code", getFaker().address().zipCode(), null,  InputType.input, true, formId, 210);
+			sendDataToInputImproved("Address", getFaker().address().streetName(), null,  InputType.textarea, true, formId, 210);
 			waitAdditionalShortTime();
 
-			sendDataToInputImproved("Address", getFaker().address().streetName(), null,  InputType.textarea, true, formId, 210);
+			sendDataToInputImproved("ZIP Code", getFaker().address().zipCode(), null,  InputType.input, true, formId, 210);
 			waitAdditionalShortTime();
 
 			sendDataToInputImproved("City", getFaker().address().cityName(), null,  InputType.input, true, formId, 210);
@@ -225,12 +225,6 @@ public class DriverPage extends PageObject {
 					InputType.input, true, formId, 40);
 			waitAdditionalShortTime();
 
-			scrollToWebElement(getWebElement(By.id("dlClassType")), "//div[contains(@class, 'ContentDiv')]");
-
-			//dlClassType
-			//dlClassType_list
-			interactAndRandomSelectFromDropDown("dlClassType", "dlClassType_list");
-
 			min_val = 2;
 			max_val = 5;
 
@@ -253,8 +247,11 @@ public class DriverPage extends PageObject {
 			sendDataToInputImproved("DL Expiration Date", null, Keys.RETURN,
 					InputType.input, true, formId, 40);
 
-			String xpath = "//*[@type='submit']";
-			Setup.getActions().click(getWebElement(By.xpath(xpath))).build().perform();
+			//scrollToWebElement(null, "//div[contains(@class, 'ContentDiv')]");
+
+			//dlClassType
+			//dlClassType_list
+			interactAndRandomSelectFromDropDown("dlClassType", "dlClassType_list");
 
 			return true;
 		} catch(Exception e) {
@@ -264,11 +261,14 @@ public class DriverPage extends PageObject {
 	}
 
 	public void checkDriverCreation() {
-		String driverNb = getElement("firstName").getAttribute("value") +
-				getElement("lastName").getAttribute("value");
-		sendDataToInput(getWebElement(searchFieldLocator), driverNb, Keys.RETURN,null);
-		Assert.assertEquals("Driver's Name does not match. \nExpected: "+ driverNb +
-						"\nActual: "+getWebElement(newDriverNameLocator).getAttribute("value"),
-				driverNb,getWebElement(newDriverNameLocator).getAttribute("value"));
+		waitForSpinningElementDisappear();
+		String driverName = (String) Setup.getValueStore("driverName");
+		
+		sendDataToInput(getWebElement(searchFieldLocator), driverName, null,null);
+		sendDataToInput(getWebElement(searchFieldLocator), null, Keys.RETURN,null);
+
+		//Assert.assertEquals("Driver's Name does not match. \nExpected: "+ driverName +
+		//				"\nActual: "+getWebElement(newDriverNameLocator).getAttribute("value"),
+		//		driverName,getWebElement(newDriverNameLocator).getAttribute("value"));
 	}
 }
