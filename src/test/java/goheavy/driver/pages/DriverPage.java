@@ -3,7 +3,6 @@ package goheavy.driver.pages;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
-
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -13,25 +12,25 @@ import general.Setup;
 
 @SuppressWarnings("unused")
 public class DriverPage extends PageObject {
-	private By menuDriversLinkLocator = By.xpath("//span[text()='Drivers']/ancestor::span[@class='ant-menu-title-content']");
-	private By addDriverButtonLocator = By.xpath("//span[text()='Add Driver']/ancestor::button[@class='ant-btn ant-btn-primary']");
-	private By addDriverTitleLocator = By.xpath("//span[text()='Add Driver']/ancestor::div[@class='ant-row ant-row-space-between ant-row-middle']");
-	private HashMap<String, WebElement> formElements;
+	private final By menuDriversLinkLocator = By.xpath("//span[text()='Drivers']/ancestor::span[@class='ant-menu-title-content']");
+	private final By addDriverButtonLocator = By.xpath("//span[text()='Add Driver']/ancestor::button[@class='ant-btn ant-btn-primary']");
+	private final By addDriverTitleLocator = By.xpath("//span[text()='Add Driver']/ancestor::div[@class='ant-row ant-row-space-between ant-row-middle']");
+	private final HashMap<String, WebElement> formElements;
 	By driverPhotoLocator = By.xpath("//label[contains(text(),'shoulders')]/" +
 			"ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']");
 	By driverLicenseFrontLocator = By.xpath("//label[contains(@title,'(Front)')]/"
 			+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']");
 	By driverLicenseBackLocator = By.xpath("//label[contains(@title,'(Back)')]/"
 			+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']");
-	By tshirtSizelocator = By.id("tShirtSize");
-	By tshirtOptionsLocator = By.id("tShirtSize_list");
+	By tShirtSizeLocator = By.id("tShirtSize");
+	By tShirtOptionsLocator = By.id("tShirtSize_list");
 	By searchFieldLocator = By.xpath("//input[@placeholder='Search...']");
 	By newDriverNameLocator = By.xpath("//td[@class='ant-table-cell'][2]");
 	String form;
 
 	public DriverPage() {
 		super();
-		this.urlpath = "/driver";
+		this.urlPath = "/driver";
 		formElements = new HashMap<>();
 		setForm("//form[@id='driver-form']");
 	}
@@ -58,8 +57,8 @@ public class DriverPage extends PageObject {
 
 	public boolean goToView() {
 		try {
-			waitForSpinningElementDissapear();
-			//waitAddittionalTime();
+			waitForSpinningElementDisappear();
+			//waitAdditionalTime();
 			clickOnElement(menuDriversLinkLocator);
 			return true;
 		} catch(Exception e) {
@@ -68,24 +67,21 @@ public class DriverPage extends PageObject {
 		}
 	}
 	
-	public void waitAddittionalTime() {
+	public void waitAdditionalTime() {
 		Setup.getWait().thread(5000);
 	}
 	
-	public void waitAddittionalShortTime() {
+	public void waitAdditionalShortTime() {
 		Setup.getWait().thread(1000);
 	}
 
-	public boolean clicksOnAddDriverButton()
+	public void clicksOnAddDriverButton()
 	{
 		try {
-			waitForSpinningElementDissapear();
-			waitAddittionalTime();
+			waitForSpinningElementDisappear();
+			waitAdditionalTime();
 			clickOnElement(addDriverButtonLocator);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+		} catch (Exception ignored) { }
 	}
 
 	public void getFormElements() {
@@ -116,7 +112,7 @@ public class DriverPage extends PageObject {
 
 	public boolean insertValidData() {
 		try {
-			waitForSpinningElementDissapear();
+			waitForSpinningElementDisappear();
 			String avatar = (String) Setup.getValueStore("avatar");
 			getWebElement(driverPhotoLocator).sendKeys(avatar);
 			sendDataToInput(getElement("firstName"), getFaker().name().firstName(), null, getForm());
@@ -130,7 +126,7 @@ public class DriverPage extends PageObject {
 			sendDataToInput(getElement("email"), getFaker().internet().emailAddress(), null, getForm());
 			selectDropdown("T-Shirt Size", By.id("tshirt"), By.id("tshirtOptions"));
 			//interactDropdown("tShirtSize","tShirtSize_list");
-			//interactWithDropDownElement(tshirtSizelocator,true,tshirtOptionsLocator);
+			//interactWithDropDownElement(tshirtSizeLocator,true,tshirtOptionsLocator);
 			sendDataToInput(getElement("address"), getFaker().address().streetAddress() + getFaker().address().streetAddressNumber() + getFaker().address().streetName(), null, getForm());
 			sendDataToInput(getElement("addressZipCode"), getFaker().address().zipCode(), null, getForm());
 			sendDataToInput(getElement("addressCity"), getFaker().address().city(), null, getForm());
@@ -157,6 +153,5 @@ public class DriverPage extends PageObject {
 		Assert.assertEquals("Driver's Name does not match. \nExpected: "+ driverNb +
 						"\nActual: "+getWebElement(newDriverNameLocator).getAttribute("value"),
 				driverNb,getWebElement(newDriverNameLocator).getAttribute("value"));
-
 	}
 }

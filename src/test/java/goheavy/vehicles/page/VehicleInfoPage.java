@@ -10,7 +10,8 @@ import general.Setup;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class VehiculeInfoPage extends TabsPage {
+@SuppressWarnings("unused")
+public class VehicleInfoPage extends TabsPage {
     PageObject po;
     private String VINImageUploadItemXpath;
     private String VINInputID;
@@ -18,7 +19,7 @@ public class VehiculeInfoPage extends TabsPage {
     private String VINInputXpath;
     private String makeXpath;
     private String payloadXpath;
-    private String vehicleYearMakepath;
+    private String vehicleYearMakeXpath;
     private String vehicleCapacitySubSectionXpath;
     private String VehicleTypeID;
     private String stepBaseXpath;
@@ -26,7 +27,7 @@ public class VehiculeInfoPage extends TabsPage {
     private String carIconXpath;
     private String longXpath;
     private String widthXpath;
-    private String heigthXpath;
+    private String heightXpath;
     private String formScroll = "//*[@id='step-one-form']/ancestor::div["
             + "@class='templateStyles__ContentDiv-sc-144t9h2-1 bcVeZj']";
     private String vehiclePayloadID;
@@ -45,30 +46,27 @@ public class VehiculeInfoPage extends TabsPage {
     By vehicleInfoCheck = By.xpath("//span[@role='img' and @aria-label='check']/" +
             "ancestor::div[@class='ant-steps-item-container']/descendant::div[@class='ant-steps-item-title']");
 
-    VehiculeFeaturesPage vehiculeFeaturesPage;
+    VehicleFeaturesPage vehicleFeaturesPage;
 
-    public VehiculeInfoPage() {
+    public VehicleInfoPage() {
         super();
         po = new PageObject();
-        vehiculeFeaturesPage = new VehiculeFeaturesPage();
-        setVINImageUploadItemXpath("//label[@class='ant-form-item-required' and @title='VIN Image']/"
-                + "ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']");
-        setVINInputID("vin");
-        setVehicleMakeID("make");
-        setVehicleTypeID("vehicleTypeId");
-        setStepBaseXpath("//div[@class='ant-steps-item-container']");
-        setCarIconXpath("//span[text()='Add Vehicle']/span[@role='img' and @class='anticon anticon-car']");
-        setVehicleYearMakepath("//input[@placeholder='Enter Vehicle year']/ancestor::div[@class='ant-picker-input']");
-        setVehicleCapacitySubSectionXpath("//span[@class='ant-divider-inner-text' and text()='Vehicle Capacity']");
-        setVehiclePayloadID("payload");
-        setVINInputXpath("//input[@id='vin']");
-        setAddVehicleTitleXpath("//span[@role='img'and @aria-label='car' and "
-                + "@class='anticon anticon-car']/ancestor::div[contains(@class, "
-                + "'ant-col')]/descendant::span[text()='Add Vehicle']");
+        vehicleFeaturesPage = new VehicleFeaturesPage();
+        setVINImageUploadItemXpath();
+        setVINInputID();
+        setVehicleMakeID();
+        setVehicleTypeID();
+        setStepBaseXpath();
+        setCarIconXpath();
+        setVehicleYearMakeXpath();
+        setVehicleCapacitySubSectionXpath();
+        setVehiclePayloadID();
+        setVINInputXpath();
+        setAddVehicleTitleXpath();
         setMakeXpath("//input[@id='make']");
         setLongXpath("//input[@id='long']");
         setWidthXpath("//input[@id='width']");
-        setHeigthXpath("//input[@id='height']");
+        setHeightXpath("//input[@id='height']");
         setVehicleTypeXpath("//input[@id='vehicleTypeId']");
         setPayloadXpath("//input[@id='payload']");
     }
@@ -125,20 +123,20 @@ public class VehiculeInfoPage extends TabsPage {
         this.widthXpath = widthXpath;
     }
 
-    public String getHeigthXpath() {
-        return heigthXpath;
+    public String getHeightXpath() {
+        return heightXpath;
     }
 
-    public void setHeigthXpath(String heigthXpath) {
-        this.heigthXpath = heigthXpath;
+    public void setHeightXpath(String heightXpath) {
+        this.heightXpath = heightXpath;
     }
 
     private String getVehiclePayloadID() {
         return vehiclePayloadID;
     }
 
-    private void setVehiclePayloadID(String vehiclePayloadID) {
-        this.vehiclePayloadID = vehiclePayloadID;
+    private void setVehiclePayloadID() {
+        this.vehiclePayloadID = "payload";
     }
 
     //
@@ -155,24 +153,24 @@ public class VehiculeInfoPage extends TabsPage {
         return this.vehicleCapacitySubSectionXpath;
     }
 
-    private void setVehicleCapacitySubSectionXpath(String vehicleSubSectionXpath) {
-        this.vehicleCapacitySubSectionXpath = vehicleSubSectionXpath;
+    private void setVehicleCapacitySubSectionXpath() {
+        this.vehicleCapacitySubSectionXpath = "//span[@class='ant-divider-inner-text' and text()='Vehicle Capacity']";
     }
 
-    private String getVehicleYearMakepath() {
-        return vehicleYearMakepath;
+    private String getVehicleYearMakeXpath() {
+        return vehicleYearMakeXpath;
     }
 
-    private void setVehicleYearMakepath(String vehicleYearMakepath) {
-        this.vehicleYearMakepath = vehicleYearMakepath;
+    private void setVehicleYearMakeXpath() {
+        this.vehicleYearMakeXpath = "//input[@placeholder='Enter Vehicle year']/ancestor::div[@class='ant-picker-input']";
     }
 
     private String getVehicleMakeID() {
         return VehicleMakeID;
     }
 
-    private void setVehicleMakeID(String VehicleMakeID) {
-        this.VehicleMakeID = VehicleMakeID;
+    private void setVehicleMakeID() {
+        this.VehicleMakeID = "make";
     }
 
 
@@ -181,24 +179,24 @@ public class VehiculeInfoPage extends TabsPage {
     }
 
 
-    private void setVINInputID(String VINInputID) {
-        this.VINInputID = VINInputID;
+    private void setVINInputID() {
+        this.VINInputID = "vin";
     }
 
     private String getVINImageUploadItemXpath() {
         return this.VINImageUploadItemXpath;
     }
 
-    private void setVINImageUploadItemXpath(String vINImageUploadItemXpath) {
-        this.VINImageUploadItemXpath = vINImageUploadItemXpath;
+    private void setVINImageUploadItemXpath() {
+        this.VINImageUploadItemXpath = "//label[@class='ant-form-item-required' and @title='VIN Image']/ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']";
     }
 
     private String getCarIconXpath() {
         return carIconXpath;
     }
 
-    private void setCarIconXpath(String carIconXpath) {
-        this.carIconXpath = carIconXpath;
+    private void setCarIconXpath() {
+        this.carIconXpath = "//span[text()='Add Vehicle']/span[@role='img' and @class='anticon anticon-car']";
     }
 
 
@@ -206,8 +204,8 @@ public class VehiculeInfoPage extends TabsPage {
         return this.VINInputXpath;
     }
 
-    private void setVINInputXpath(String vINInputXpath) {
-        this.VINInputXpath = vINInputXpath;
+    private void setVINInputXpath() {
+        this.VINInputXpath = "//input[@id='vin']";
     }
 
     private String getAddVehicleTitleXpath() {
@@ -215,7 +213,7 @@ public class VehiculeInfoPage extends TabsPage {
     }
 
     private void checkVehicleTypeComponentBehaviour() {
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         try {
             Setup.getWait().thread(150);
             clickOn(getWebElement(By.id(getVehicleTypeID())));
@@ -232,10 +230,10 @@ public class VehiculeInfoPage extends TabsPage {
             hoverElement(null, element_list.get(number));
             clickOn(element_list.get(number));
             Setup.getWait().thread(150);
-        } catch(Exception e) {}
+        } catch(Exception ignored) {}
     }
-    private void setAddVehicleTitleXpath(String addVehicleTitleXpath) {
-        this.addVehicleTitleXpath = addVehicleTitleXpath;
+    private void setAddVehicleTitleXpath() {
+        this.addVehicleTitleXpath = "//span[@role='img' and @aria-label='car' and @class='anticon anticon-car']/ancestor::div[contains(@class, 'ant-col')]/descendant::span[text()='Add Vehicle']";
     }
 
     private String getVehicleTypeID() {
@@ -243,8 +241,8 @@ public class VehiculeInfoPage extends TabsPage {
     }
 
 
-    private void setVehicleTypeID(String VehicleTypeID) {
-        this.VehicleTypeID = VehicleTypeID;
+    private void setVehicleTypeID() {
+        this.VehicleTypeID = "vehicleTypeId";
     }
 
 
@@ -252,8 +250,8 @@ public class VehiculeInfoPage extends TabsPage {
         return this.stepBaseXpath;
     }
 
-    private void setStepBaseXpath(String stepBaseXpath) {
-        this.stepBaseXpath = stepBaseXpath;
+    private void setStepBaseXpath() {
+        this.stepBaseXpath = "//div[@class='ant-steps-item-container']";
     }
 
     public void insertValidData() {
@@ -273,8 +271,8 @@ public class VehiculeInfoPage extends TabsPage {
         ThreadLocalRandom tlr = ThreadLocalRandom.current();
         int randomNum = tlr.nextInt(min_val, max_val + 1);
 
-        sendDataToInput(getWebElement(By.xpath(getVehicleYearMakepath())), String.valueOf(randomNum), null, getFormScroll());
-        sendDataToInput(getWebElement(By.xpath(getVehicleYearMakepath())), null, Keys.RETURN, getFormScroll());
+        sendDataToInput(getWebElement(By.xpath(getVehicleYearMakeXpath())), String.valueOf(randomNum), null, getFormScroll());
+        sendDataToInput(getWebElement(By.xpath(getVehicleYearMakeXpath())), null, Keys.RETURN, getFormScroll());
 
         fillDimensions();
         min_val = 90;
@@ -284,7 +282,7 @@ public class VehiculeInfoPage extends TabsPage {
         scrollToWebElement(null, getFormScroll());
 
         clickOn(getWebElement(By.xpath("//button[@type='submit']/descendant::span[text()='Next']")));
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         Setup.getWait().thread(1500);
 
     }
@@ -304,7 +302,7 @@ public class VehiculeInfoPage extends TabsPage {
 
     public boolean systemOpensAddVehicleView() {
         Setup.getWait().thread(5000);
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
 
         try {
             Assert.assertNotNull("Page Title not found", getPageElementBy(By.xpath(getAddVehicleTitleXpath())));
@@ -319,7 +317,7 @@ public class VehiculeInfoPage extends TabsPage {
             Assert.assertNotNull("Vehicle Make Input not found or do not match Expected Criteria",
                     getPageElementBy(By.xpath(getVehicleMakeID())));
             Assert.assertNotNull("Vehicle Year Make Input not found or do not match Expected Criteria",
-                    getPageElementBy(By.xpath(getVehicleYearMakepath())));
+                    getPageElementBy(By.xpath(getVehicleYearMakeXpath())));
             Assert.assertNotNull("Vehicle Sub Section not found",
                     getPageElementBy(By.xpath(getVehicleCapacitySubSectionXpath())));
             //TODO: Work in progress check for every element on the page to be Expected

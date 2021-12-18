@@ -1,6 +1,5 @@
 package general;
 
-//import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -22,18 +21,9 @@ public class WaitingObject {
 	 * @executeExpectedCondition Method to execute the wait statement
 	 * @param expected
 	 * @param message
-	 * @param time
 	 */
-	public void executeExpectedCondition(ExpectedCondition<?> expected, String message, int time) {
-		waitMethod(10).withMessage(message).until(expected);
-	}
-
-	/**
-	 *
-	 * @param time
-	 */
-	public void setImplicityWait(int time) {
-
+	public void executeExpectedCondition(ExpectedCondition<?> expected, String message) {
+		waitMethod().withMessage(message).until(expected);
 	}
 
 	/**
@@ -48,7 +38,8 @@ public class WaitingObject {
 	 *
 	 * @param time
 	 */
-	public void implicityWait(long time) {
+	@SuppressWarnings("unused")
+	public void implicitWait(long time) {
 		driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
 	}
 
@@ -57,12 +48,12 @@ public class WaitingObject {
 	 * @param by
 	 * @param time
 	 */
+	@SuppressWarnings("unused")
 	public void waitUntilElementAppear(By by, int time) {
 		WebElement element1 = driver.findElement(by);
 		ExpectedCondition<?> expectedCondition = ExpectedConditions.visibilityOf(element1);
 		String mss = "Element " + element1 + " not found";
-		executeExpectedCondition(expectedCondition, mss, time);
-
+		executeExpectedCondition(expectedCondition, mss);
 	}
 
 	/**
@@ -70,8 +61,9 @@ public class WaitingObject {
 	 * @param by
 	 * @param time
 	 */
+	@SuppressWarnings("unused")
 	public void waitUntilElementDisappear(By by, int time) {
-		WebElement element1 = null;
+		WebElement element1;
 		try {
 			element1 = driver.findElement(by);
 		} catch (Exception e) {
@@ -79,41 +71,16 @@ public class WaitingObject {
 		}
 		ExpectedCondition<?> expectedCondition = ExpectedConditions.invisibilityOf(element1);
 		String mss = "Element " + element1 + " still in dom ";
-		executeExpectedCondition(expectedCondition, mss, time);
+		executeExpectedCondition(expectedCondition, mss);
 
 	}
 
 	/**
 	 *
-	 * @param time
 	 * @return
 	 */
-	private WebDriverWait waitMethod(long time) {
-		return new WebDriverWait(this.driver, time);
-	}
-
-	/**
-	 *
-	 * @param by
-	 * @param msg
-	 * @return
-	 */
-	public WebElement visibilityOfElement(By by, String msg) {
-		WebDriverWait wait = waitMethod(10);
-		if (!msg.equals("")) {
-			wait.withMessage(msg);
-		}
-		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-	}
-
-	/**
-	 *
-	 * @param expectedMssg
-	 */
-	public void textAppear(String expectedMssg) {
-		visibilityOfElement(By.xpath("//*[contains(text(),'" + expectedMssg + "')]"),
-				"Unable to locate text '" + expectedMssg + "'");
-
+	private WebDriverWait waitMethod() {
+		return new WebDriverWait(this.driver, 10);
 	}
 
 	/**
@@ -126,13 +93,5 @@ public class WaitingObject {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 *
-	 * @param save
-	 */
-	public void waiForElementClick(WebElement save) {
-		waitMethod(10).until(ExpectedConditions.elementToBeClickable(save)).click();
 	}
 }

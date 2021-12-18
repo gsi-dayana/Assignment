@@ -6,7 +6,6 @@ public class Dashboard extends PageObject {
 
 	public Dashboard() {
 		super();
-		this.urlpath = "";
+		this.urlPath = "";
 	}
-
 }

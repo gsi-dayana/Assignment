@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -18,10 +17,10 @@ import com.github.javafaker.Faker;
 
 public class PageObject {
     private WebDriver driver;
-    protected String urlpath = "";
+    protected String urlPath = "";
     private WebDriverWait wait;
     private int waitTime;
-    private String spinningElement = "//div[contains(@class,'ant-spin-spinning')]";
+    private final String spinningElement = "//div[contains(@class,'ant-spin-spinning')]";
     public Faker faker;
     private HashMap<String, WebElement> choiceItems;
 
@@ -33,11 +32,10 @@ public class PageObject {
         setWait(new WebDriverWait(this.getDriver(), this.getWaitTime()));
     }
 
-    public void setImage(WebElement element, Object object) {
-        WebElement image_element = element;
+    public void setImage(WebElement element) {
         String avatar = (String) Setup.getValueStore("avatar");
-        image_element.sendKeys(avatar);
-        setChoiceItems(new HashMap<String, WebElement>());
+        element.sendKeys(avatar);
+        setChoiceItems(new HashMap<>());
     }
 
     public HashMap<String, WebElement> getChoiceItems() {
@@ -48,6 +46,7 @@ public class PageObject {
         this.choiceItems = choiceItems;
     }
 
+    @SuppressWarnings("unused")
     public void setImageImproved(String title, Object object) {
         String xpath = "//label[@title=\"" + title + "\"]/ancestor::div[@class='ant-row ant-form-item']"
                 + "/descendant::input[@type='file']";
@@ -56,6 +55,7 @@ public class PageObject {
         image_element.sendKeys(avatar);
     }
 
+    @SuppressWarnings("unused")
     public void sendDataToInputImproved(String labelText, String data, Keys key, InputType type, boolean scroll, String form,
                                         int y_pos) {
         String xpath = "//label[text()=\"" + labelText + "\"]/ancestor::div[@class='ant-row ant-form-item']/"
@@ -70,10 +70,12 @@ public class PageObject {
             Setup.getActions().sendKeys(element, data).build().perform();
     }
 
+    @SuppressWarnings("unused")
     public void print(Object string) {
         System.out.println(string);
     }
 
+    @SuppressWarnings("unused")
     public void submitForm(String formId) {
         try {
             String formXpath = "//*[@id='" + formId + "']/ancestor::div"
@@ -90,10 +92,12 @@ public class PageObject {
         Setup.getJsExecutor().executeScript(script, getWebElement(By.xpath(formXpath)));
     }
 
+    @SuppressWarnings("unused")
     public void killEvent() {
         System.exit(0);
     }
 
+    @SuppressWarnings("unused")
     public void acceptImage(String title) {
         String xpath = "//label[@title=\"" + title + "\"]/ancestor::div[contains(@class, 'ant-col')]/"
                 + "descendant::span[@class='anticon anticon-check']";
@@ -121,7 +125,7 @@ public class PageObject {
     }
 
     public void openURL() {
-        Setup.openUrl(System.getProperty("defaultURL").concat("/").concat(urlpath));
+        Setup.openUrl(System.getProperty("defaultURL").concat("/").concat(urlPath));
     }
 
     public WebElement getWebElement(By by) {
@@ -132,9 +136,9 @@ public class PageObject {
         return this.getDriver().findElements(by);
     }
 
-    protected void cliksOnButton(By by) {
+    protected void clicksOnButton(By by) {
         getWebElement(by).click();
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         Setup.getWait().waitForLoading((Integer) Setup.getTimeouts().get("implicit"));
     }
 
@@ -143,36 +147,35 @@ public class PageObject {
     }
 
     public String getPagePath() {
-        return this.urlpath;
+        return this.urlPath;
     }
 
     public void checkSpinningAppears() {
-        //Setup.getWait().waitForLoading((Integer) Setup.getTimeouts().get("implicit"));
         Setup.getWait().waitUntilElementAppear(By.xpath(spinningElement), (Integer) Setup.getTimeouts().get("pageLoad"));
         Setup.getWait().waitForLoading((Integer) Setup.getTimeouts().get("implicit"));
     }
 
-    public void waitForSpinningElementDissapear() {
+    public void waitForSpinningElementDisappear() {
         try {
             //Setup.getWait().waitForLoading((Long) (Setup.getTimeouts().get("implicit")));
             checkSpinningAppears();
             Setup.getWait().waitUntilElementDisappear(By.xpath(spinningElement), 10);
             Setup.getWait().waitForLoading((Long) (Setup.getTimeouts().get("implicit")));
             Setup.getWait().thread(500);
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) { }
     }
 
-    public void scroll(String scrollElementxpath, By targetElementxpath) {
+    @SuppressWarnings("unused")
+    public void scroll(String scrollElementXpath, By targetElementXpath) {
 
-        WebElement el = this.getWebElement(targetElementxpath);
+        WebElement el = this.getWebElement(targetElementXpath);
         int desired_y = el.getSize().height / 2 + el.getLocation().y;
 
         int current_y = (Integer.parseInt(String.valueOf(Setup.executeScript("return window.innerHeight"))) / 2)
                 + Integer.parseInt(String.valueOf(Setup.executeScript("return window.pageYOffset")));
         int scroll_y_by = (desired_y + 150) + (current_y + 150);
 
-        Setup.executeScript("var el=" + "document.evaluate('" + scrollElementxpath + "',"
+        Setup.executeScript("var el=" + "document.evaluate('" + scrollElementXpath + "',"
                 + " document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;"
                 + " el.scrollTo(0, arguments[0]);", scroll_y_by);
 
@@ -181,11 +184,11 @@ public class PageObject {
 
 
     public void clickOn(WebElement element) {
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         Setup.getWait().thread(150);
         Setup.getActions().moveToElement(element).build().perform();
         Setup.getActions().click(element).build().perform();
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         Setup.getWait().thread(150);
     }
 
@@ -198,21 +201,17 @@ public class PageObject {
         try {
             if (element.getAttribute("value").length() > 0)
                 clear_element_text(element);
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) { }
         scrollToWebElement(element, form);
-        if (data != null) {
+        if (data != null)
             Setup.getActions().sendKeys(element, (CharSequence) data).build().perform();
-            //Setup.getActions().sendKeys(Keys.RETURN);
-        }
-
         else
             Setup.getActions().sendKeys(element, key).build().perform();
     }
 
     public  void scrollToWebElement(WebElement element, String form) {
         Setup.getWait().thread(500);
-        int y_pos = Integer.valueOf(Setup.timeouts.get("script").toString());
+        int y_pos = Integer.parseInt(Setup.timeouts.get("script").toString());
         if (element != null)
             y_pos = element.getLocation().y;
 
@@ -244,18 +243,17 @@ public class PageObject {
         this.waitTime = waitTime;
     }
 
+    @SuppressWarnings("unused")
     public HashMap<String, WebElement> getMenu(By by) {
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         Setup.getWait().thread(4000);
-        HashMap<String, WebElement> list = new HashMap<String, WebElement>();
+        HashMap<String, WebElement> list = new HashMap<>();
 
         if (!Objects.isNull(by)) {
             WebElement e = this.getWebElement(by);
 
             WebElement el2 = e.findElement(By.xpath("span[2]"));
             list.put(el2.getText(), e);
-        } else {
-            // return an array of all Menu value
         }
         return list;
     }
@@ -266,11 +264,13 @@ public class PageObject {
 
     public void clicks_button_done() {
         clickOn(getWebElement(By.xpath("//button[@type='submit']")));
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
     }
+
+    @SuppressWarnings("unused")
     public void clicks_button_cancel() {
         clickOn(getWebElement(By.xpath("//button[@type='button']/span[text()='Cancel']")));
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
     }
 
     public boolean hoverElement(By by, WebElement element) {
@@ -289,7 +289,6 @@ public class PageObject {
     }
 
     public void selectDropdown(String fieldName,By dropdown,By options) {
-        //waitForSpinningElementDissapear();
         try {
             Setup.getWait().thread(150);
             Setup.getActions().moveToElement(getWebElement(dropdown)).build().perform();
@@ -305,9 +304,10 @@ public class PageObject {
             hoverElement(null, dropdown_options.get(number));
             clickOn(dropdown_options.get(number));
             Setup.getWait().thread(150);
-        } catch(Exception e) {}
+        } catch(Exception ignored) { }
     }
 
+    @SuppressWarnings("unused")
     public void interactWithDropDownElement(By dropDown, Boolean scrollRequired, By dropDownContainer) {
         int index = 0;
         waitForWebElement(dropDown);
@@ -326,7 +326,7 @@ public class PageObject {
         scrollVerticalDown(10, getWebElement(By.xpath("//div[@class='rc-virtual-list-holder']")), false,
                 null);
 
-        HashMap<Integer, String> choiceElementsIndexes = new HashMap<Integer, String>();
+        HashMap<Integer, String> choiceElementsIndexes = new HashMap<>();
 
         for (Map.Entry<String, WebElement> choiceItem: getChoiceItems().entrySet())
             choiceElementsIndexes.put(index++, choiceItem.getKey());

@@ -6,7 +6,7 @@ import general.Steps;
 import goheavy.dashboard.pages.Dashboard;
 
 public class DashboardStep extends Steps{
-	private Dashboard dashboard;
+	private final Dashboard dashboard;
 
 	public DashboardStep() {
 		dashboard = new Dashboard();
@@ -17,5 +17,4 @@ public class DashboardStep extends Steps{
 		Assert.assertTrue("The path provided is not correct in the url. path: " + path,
 				dashboard.getCurrentUrl().toLowerCase().contains(path));
 	}
-
 }

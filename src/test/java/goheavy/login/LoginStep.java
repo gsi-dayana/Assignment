@@ -8,7 +8,7 @@ import goheavy.login.page.LoginPage;
 
 public class LoginStep extends Steps {
 
-	private LoginPage loginPage;
+	private final LoginPage loginPage;
 	GeneralSteps generalSteps;
 
 	public LoginStep() {
@@ -77,7 +77,7 @@ public class LoginStep extends Steps {
 
 	public void the_system_allows_the_user_access_to_the_system() {
 		try {
-			loginPage.waitForElelemtDisappear();
+			loginPage.waitForElementDisappear();
 		} catch (Exception e) {
 			fail("The login view did not disappear.");
 		}
@@ -91,7 +91,7 @@ public class LoginStep extends Steps {
 		}
 	}
 
-	public void the_system_shows_error_message_for_not_registed(String message) throws Exception {
+	public void the_system_shows_error_message_for_not_registered(String message) {
 		try {
 			Assert.assertTrue(loginPage.getNotRegisteredInfoErrorMessage(message));
 		} catch (Exception e) {
@@ -99,6 +99,7 @@ public class LoginStep extends Steps {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void send_logout_request_to_keep_on_testing() {
 		try {
 			generalSteps.logoutProcess();

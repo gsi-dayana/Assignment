@@ -1,13 +1,11 @@
 package goheavy.fleetowners;
 
 import org.junit.Assert;
-
 import general.Steps;
 import goheavy.fleetowners.pages.FleetPage;
 
 public class FleetStep extends Steps{
-	private FleetPage fleetPage;
-
+	private final FleetPage fleetPage;
 	public FleetStep() {
 		fleetPage = new FleetPage();
 	}
@@ -17,5 +15,4 @@ public class FleetStep extends Steps{
 		Assert.assertTrue(" The path provided is not correct in the url. path: " + path,
 				fleetPage.getCurrentUrl().toLowerCase().contains(path));
 	}
-
 }

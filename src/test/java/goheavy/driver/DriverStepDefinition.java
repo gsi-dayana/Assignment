@@ -6,11 +6,10 @@ import org.junit.Assert;
 
 @SuppressWarnings("unused")
 public class DriverStepDefinition {
-	private GeneralSteps generalSteps;
-	private DriverStep driverSteps;
+	private final DriverStep driverSteps;
 
 	public DriverStepDefinition() {
-		generalSteps = new GeneralSteps();
+		GeneralSteps generalSteps = new GeneralSteps();
 		driverSteps = new DriverStep();
 	}
 
@@ -63,5 +62,4 @@ public class DriverStepDefinition {
 			Assert.fail(e.getMessage());
 		}
 	}
-
 }

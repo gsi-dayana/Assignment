@@ -8,8 +8,8 @@ import goheavy.driver.DriverStep;
 import goheavy.fleetowners.FleetStep;
 
 public class LoginStepDefinition {
-	private LoginStep loginStep;
-	private GeneralSteps generalSteps;
+	private final LoginStep loginStep;
+	private final GeneralSteps generalSteps;
 
 	public LoginStepDefinition() {
 		loginStep = new LoginStep();
@@ -37,34 +37,34 @@ public class LoginStepDefinition {
 	}
 
 
-	@Then("Sytem redirects to {string} view")
-	public void sytem_redirects_to_dashboard_view(String redirect) {
+	@Then("System redirects to {string} view")
+	public void system_redirects_to_dashboard_view(String redirect) {
 		Steps view = new DashboardStep();
 
-		if (redirect == "Drivers List")
+		if (redirect.equals("Drivers List"))
 			view = new DriverStep();
-		else if (redirect == "Fleet Owners List")
+		else if (redirect.equals("Fleet Owners List"))
 			view = new FleetStep();
 
 		view.checkPage();
 	}
 
 	@Then("The system displays an error {string} below each field")
-	public void sytem_shows_error_message_for_required_fileds(String message) {
+	public void system_shows_error_message_for_required_fields(String message) {
 		loginStep.the_system_shows_error_message(message);
 	}
 
 	@Then("The system displays the following error {string} in a popup window")
-	public void sytem_shows_error_message_for_not_registered_info(String message) {
+	public void system_shows_error_message_for_not_registered_info(String message) {
 		try {
-			loginStep.the_system_shows_error_message_for_not_registed(message);
+			loginStep.the_system_shows_error_message_for_not_registered(message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Then("System Logs Out")
-	public void sytem_logs_out() {
+	public void system_logs_out() {
 		try {
 			generalSteps.logoutProcess();
 		} catch (Exception e) {
@@ -84,40 +84,8 @@ public class LoginStepDefinition {
 			email = cred.getProperty("admin.email");
 			pass = cred.getProperty("admin.password");
 		}
-		// Mock we get the data from excel or any file
 		loginStep.openURL();
 		loginStep.user_insert_email_and_password(email, pass);
 		loginStep.user_clicks_on_the_button();
 	}
-
-	/*
-	@Given("The user is in  \"Account Settings\" view")
-	public void the_user_is_in_account_settings_view() {
-		try {
-			generalSteps.goToAccountSettingsView();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	@When("User insert valid data")
-	public void user_inserts_valid_data() {
-		System.out.println("User insert valid data");
-	}
-
-	@When("Clicks on the \"Update\" button")
-	public void user_click_update_btn() {
-		System.out.println("User clicks update button");
-	}
-
-	@Then("The system saves the user profile information")
-	public void system_saves_the_info() {
-		System.out.println("System Saves the Info");
-	}
-
-	@Then("The system displays popup with success message: \"Your profile was successfully updated\"")
-	public void system_shows_success_message() {
-		System.out.println("System Shows Success Message");
-	}
-	*/
 }

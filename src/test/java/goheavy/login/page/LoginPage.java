@@ -26,27 +26,27 @@ public class LoginPage extends PageObject {
 	private String PassRequiredTextXpath;
 	private String ForgotPassLinkXpath;
 	private String IncorrectEmailOrPassDivXpath;
-	private HashMap<String, WebElement> eles;
+	private HashMap<String, WebElement> elements;
 
 	public LoginPage() {
 		super();
 		setLoginH1Xpath("//h1[text()='Login']");
 		setLoginFormXpath("//form[@id='admin-form-session']");
-		setCompanyLogoXpath("//img[@alt='Site Logo']");
+		setCompanyLogoXpath();
 		setLoginPassShowHideButtonXpath(
 				"//span[@role='img' and @aria-label='eye-invisible' and "
 				+ "@class='anticon anticon-eye-invisible ant-input-password-icon']");
 		setFormSubmitButtonXpath("//button[@environment='admin' and @type='button']");
-		setForgotPassLinkXpath("//span[@class='ant-tag ant-tag-checkable']");
-		setEmailRequiredTextXpath("//label[@title='Email']/../..//div[@role='alert']");
-		setPassRequiredTextXpath("//label[@title='Password']/../..//div[@role='alert']");
-		setIncorrectEmailOrPassDivXpath("//div[@class='ant-notification-notice-message']");
-		setEles(new HashMap<String, WebElement>());
+		setForgotPassLinkXpath();
+		setEmailRequiredTextXpath();
+		setPassRequiredTextXpath();
+		setIncorrectEmailOrPassDivXpath();
+		setElements(new HashMap<>());
 		setWaitTime(5000);
-		this.urlpath = "login";
+		this.urlPath = "login";
 	}
 
-	public WebElement getElement(By by) throws Exception {
+	public WebElement getElement(By by) {
 		return getWebElement(by);
 	}
 
@@ -62,8 +62,8 @@ public class LoginPage extends PageObject {
 		return IncorrectEmailOrPassDivXpath;
 	}
 
-	void setIncorrectEmailOrPassDivXpath(String incorrectEmailOrPassDivXpath) {
-		IncorrectEmailOrPassDivXpath = incorrectEmailOrPassDivXpath;
+	void setIncorrectEmailOrPassDivXpath() {
+		IncorrectEmailOrPassDivXpath = "//div[@class='ant-notification-notice-message']";
 	}
 
 	String getMissingRequiredFieldText() {
@@ -90,36 +90,36 @@ public class LoginPage extends PageObject {
 		this.password = password;
 	}
 
-	public HashMap<String, WebElement> getEles() {
-		return eles;
+	public HashMap<String, WebElement> getElements() {
+		return elements;
 	}
 
-	void setEles(HashMap<String, WebElement> eles) {
-		this.eles = eles;
+	void setElements(HashMap<String, WebElement> elements) {
+		this.elements = elements;
 	}
 
 	String getPassRequiredTextXpath() {
 		return PassRequiredTextXpath;
 	}
 
-	void setPassRequiredTextXpath(String passRequiredTextXpath) {
-		PassRequiredTextXpath = passRequiredTextXpath;
+	void setPassRequiredTextXpath() {
+		PassRequiredTextXpath = "//label[@title='Password']/../..//div[@role='alert']";
 	}
 
 	String getEmailRequiredTextXpath() {
 		return EmailRequiredTextXpath;
 	}
 
-	void setEmailRequiredTextXpath(String emailRequiredTextXpath) {
-		EmailRequiredTextXpath = emailRequiredTextXpath;
+	void setEmailRequiredTextXpath() {
+		EmailRequiredTextXpath = "//label[@title='Email']/../..//div[@role='alert']";
 	}
 
 	public String getForgotPassLinkXpath() {
 		return ForgotPassLinkXpath;
 	}
 
-	void setForgotPassLinkXpath(String forgotPassLinkXpath) {
-		ForgotPassLinkXpath = forgotPassLinkXpath;
+	void setForgotPassLinkXpath() {
+		ForgotPassLinkXpath = "//span[@class='ant-tag ant-tag-checkable']";
 	}
 
 	public String getFormSubmitButtonXpath() {
@@ -142,8 +142,8 @@ public class LoginPage extends PageObject {
 		return CompanyLogoXpath;
 	}
 
-	void setCompanyLogoXpath(String companyLogoXpath) {
-		CompanyLogoXpath = companyLogoXpath;
+	void setCompanyLogoXpath() {
+		CompanyLogoXpath = "//img[@alt='Site Logo']";
 	}
 
 	public String getLoginH1Xpath() {
@@ -162,7 +162,7 @@ public class LoginPage extends PageObject {
 		LoginFormXpath = loginFormXpath;
 	}
 
-	public boolean getCompanyLogoAndImage() throws Exception {
+	public boolean getCompanyLogoAndImage() {
 		setElement(By.xpath(getCompanyLogoXpath()));
 		getWait().until(ExpectedConditions.presenceOfElementLocated(getElement()));
 		WebElement element = getElement(By.xpath(getCompanyLogoXpath()));
@@ -170,7 +170,7 @@ public class LoginPage extends PageObject {
 				element.getAttribute("src").equals(logo_image_src);
 	}
 
-	public HashMap<String, WebElement> fillCredentials(String email, String password) {
+	public void fillCredentials(String email, String password) {
 		setEmail(email);
 		setPassword(password);
 		WebElement email_element = getWebElement(By.id(user_id));
@@ -178,10 +178,8 @@ public class LoginPage extends PageObject {
 		WebElement pass_element = getWebElement(By.id(password_id));
 		pass_element.sendKeys(getPassword());
 
-		getEles().put("email", email_element);
-		getEles().put("password", pass_element);
-
-		return eles;
+		getElements().put("email", email_element);
+		getElements().put("password", pass_element);
 	}
 
 	public boolean getMissingFieldsErrorMessage(String message) {
@@ -193,8 +191,8 @@ public class LoginPage extends PageObject {
 				getWait().until(ExpectedConditions.presenceOfElementLocated(getElement()));
 				Setup.getWait().waitUntilElementAppear(By.xpath(getEmailRequiredTextXpath()), getWaitTime());
 				WebElement missing_email_element = getWebElement(By.xpath(getEmailRequiredTextXpath()));
-				getEles().put("required_email", missing_email_element);
-				if (!getEles().get("required_email").getText().equals(getMissingRequiredFieldText()))
+				getElements().put("required_email", missing_email_element);
+				if (!getElements().get("required_email").getText().equals(getMissingRequiredFieldText()))
 					return false;
 			} else {
 				throw new Exception("--Information-- Email is not Missing from Login Form Input");
@@ -204,8 +202,8 @@ public class LoginPage extends PageObject {
 				setElement(By.xpath(getPassRequiredTextXpath()));
 				getWait().until(ExpectedConditions.presenceOfElementLocated(getElement()));
 				WebElement missing_pass_element = getWebElement(By.xpath(getPassRequiredTextXpath()));
-				getEles().put("required_password", missing_pass_element);
-				if (!getEles().get("required_password").getText().equals(getMissingRequiredFieldText()))
+				getElements().put("required_password", missing_pass_element);
+				if (!getElements().get("required_password").getText().equals(getMissingRequiredFieldText()))
 					return false;
 			} else {
 				throw new Exception("--Information-- Password is not Missing from Login Form Input");
@@ -213,11 +211,10 @@ public class LoginPage extends PageObject {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-
 		return true;
 	}
 
-	public boolean getNotRegisteredInfoErrorMessage(String message) throws Exception {
+	public boolean getNotRegisteredInfoErrorMessage(String message) {
 		setElement(By.xpath(getIncorrectEmailOrPassDivXpath()));
 		getWait().until(ExpectedConditions.presenceOfElementLocated(getElement()));
 		By element = By.xpath(getIncorrectEmailOrPassDivXpath());
@@ -225,11 +222,11 @@ public class LoginPage extends PageObject {
 		return getElement(By.xpath(getIncorrectEmailOrPassDivXpath())).getText().equals(message);
 	}
 
-	public void clickOn(By by) throws Exception {
-		cliksOnButton(by);
+	public void clickOn(By by) {
+		clicksOnButton(by);
 	}
 
-	public void waitForElelemtDisappear() throws Exception{
+	public void waitForElementDisappear() {
 		Setup.getWait().waitUntilElementDisappear(By.id(user_id), getWaitTime());
 		Setup.getWait().waitUntilElementDisappear(By.id(password_id), getWaitTime());
 	}

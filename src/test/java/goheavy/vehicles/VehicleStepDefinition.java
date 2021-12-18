@@ -3,14 +3,13 @@ package goheavy.vehicles;
 import io.cucumber.java.en.*;
 import general.GeneralSteps;
 
+@SuppressWarnings("unused")
 public class VehicleStepDefinition {
-    private VehicleStep vehicleStep;
-    @SuppressWarnings("unused")
-    private GeneralSteps generalSteps;
+    private final VehicleStep vehicleStep;
 
     public VehicleStepDefinition() {
         vehicleStep = new VehicleStep();
-        generalSteps = new GeneralSteps();
+        GeneralSteps generalSteps = new GeneralSteps();
     }
 
     @When("User clicks on \"Add Vehicle\" button.")
@@ -56,7 +55,7 @@ public class VehicleStepDefinition {
 
     //Improve this to meet the other NF requirement
     @Then("The System Creates a new Vehicle in {string} status.")
-    public void the_system_creates_vahicle_and_registers_date(String status) {
+    public void the_system_creates_vehicle_and_registers_date(String status) {
         try {
             vehicleStep.systemCreatesVehicleOnStatus(status);
         } catch (Exception e) {
@@ -84,7 +83,7 @@ public class VehicleStepDefinition {
     }
 
     @Then("The system displays \"Assign Vehicle\" view.")
-    public void system_dsiplays_assign_view() {
+    public void system_displays_assign_view() {
         try {
             vehicleStep.systemDisplaysAssignView();
         } catch (Exception e) {

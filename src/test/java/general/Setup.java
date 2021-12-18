@@ -1,32 +1,32 @@
 package general;
 
 //import io.cucumber.datatable.internal.difflib.myers.MyersDiff;
-import com.github.javafaker.Faker;
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import java.io.InputStream;
-import java.io.File;
-//import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-//import java.util.concurrent.TimeUnit;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-//import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+//import java.net.URL;
+//import java.util.concurrent.TimeUnit;
+//import org.openqa.selenium.PageLoadStrategy;
+
 public final class Setup {
 	private static WebDriver driver;
-	private static HashMap<String, Object> store = new HashMap<String, Object>();
+	private static final HashMap<String, Object> store = new HashMap<>();
 	private static Actions actions;
 	private static WaitingObject waitingObject;
-	private static String defaultURL = "";
+	@SuppressWarnings("unused")
+	private static final String defaultURL = "";
 	private static JavascriptExecutor jsExecutor;
 	public static Map<String, Object> timeouts;
 
@@ -36,7 +36,7 @@ public final class Setup {
 		//String browser = System.getProperty("browser");
 		System.setProperty("webdriver.chrome.silentOutput", "true");
 		ChromeOptions options = new ChromeOptions();
-		timeouts = new HashMap<String, Object>();
+		timeouts = new HashMap<>();
 		timeouts.put("implicit", 3000);
 		timeouts.put("pageLoad", 50000000);
 		timeouts.put("script", 300000);
@@ -57,6 +57,7 @@ public final class Setup {
 		return timeouts;
 	}
 
+	@SuppressWarnings("unused")
 	void setTimeouts(Map<String, Object> timeouts) {
 		Setup.timeouts = timeouts;
 	}
@@ -72,7 +73,6 @@ public final class Setup {
 	public static Actions getActions() {
 		return actions;
 	}
-
 
 	/**
 	 *
@@ -122,7 +122,7 @@ public final class Setup {
 		Properties pop = new Properties();
 		try {
 			pop.load(input);
-		} catch (java.io.IOException e) {}
+		} catch (java.io.IOException ignored) { }
 		setKeyValueStore("defaultProperties", pop);
 		int number = (int) (Math.random() * 4 + 1);
 		String avatar_name = "/avatar(" + String.valueOf(number) + ").png";
@@ -139,6 +139,3 @@ public final class Setup {
 		Setup.jsExecutor = jsExecutor;
 	}
 }
-
-
-

@@ -4,7 +4,6 @@ import goheavy.driver.DriverStep;
 import goheavy.vehicles.VehicleStep;
 import io.cucumber.java.en.Given;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -15,16 +14,16 @@ public class GeneralSteps extends PageObject {
     private String SettingsXpath;
     private String AccountSettingsXpath;
     private By element;
-    private VehicleStep vehicleStep;
-    private DriverStep driverStep;
+    private final VehicleStep vehicleStep;
+    private final DriverStep driverStep;
 
     public GeneralSteps() {
         super();
-        setLogOutStep1Xpath("//span[@class='ant-avatar ant-avatar-circle ant-avatar-image']");
-        setLogOutStep2Xpath("//span[@class='ant-dropdown-menu-title-content' and text()='Logout']");
-        setMenuXpath("//ul[@class='ant-menu ant-menu-root ant-menu-inline ant-menu-light' and @role='menu']");
-        setSettingsXpath("//span[text()='Settings']");
-        setAccountSettingsXpath("//span[text()='Account Settings']");
+        setLogOutStep1Xpath();
+        setLogOutStep2Xpath();
+        setMenuXpath();
+        setSettingsXpath();
+        setAccountSettingsXpath();
         vehicleStep = new VehicleStep();
         driverStep = new DriverStep();
     }
@@ -41,54 +40,55 @@ public class GeneralSteps extends PageObject {
         return AccountSettingsXpath;
     }
 
-    private void setAccountSettingsXpath(String accountSettingsXpath) {
-        AccountSettingsXpath = accountSettingsXpath;
+    private void setAccountSettingsXpath() {
+        AccountSettingsXpath = "//span[text()='Account Settings']";
     }
 
     private String getSettingsXpath() {
         return SettingsXpath;
     }
 
-    private void setSettingsXpath(String settingsXpath) {
-        SettingsXpath = settingsXpath;
+    private void setSettingsXpath() {
+        SettingsXpath = "//span[text()='Settings']";
     }
 
     private String getMenuXpath() {
         return menuXpath;
     }
 
-    private void setMenuXpath(String menuXpath) {
-        this.menuXpath = menuXpath;
+    private void setMenuXpath() {
+        this.menuXpath = "//ul[@class='ant-menu ant-menu-root ant-menu-inline ant-menu-light' and @role='menu']";
     }
 
     String getLogOutStep1Xpath() {
         return LogOutStep1Xpath;
     }
 
-    void setLogOutStep1Xpath(String logOutStep1Xpath) {
-        LogOutStep1Xpath = logOutStep1Xpath;
+    void setLogOutStep1Xpath() {
+        LogOutStep1Xpath = "//span[@class='ant-avatar ant-avatar-circle ant-avatar-image']";
     }
 
     String getLogOutStep2Xpath() {
         return LogOutStep2Xpath;
     }
 
-    private void setLogOutStep2Xpath(String logOutStep2Xpath) {
-        LogOutStep2Xpath = logOutStep2Xpath;
+    private void setLogOutStep2Xpath() {
+        LogOutStep2Xpath = "//span[@class='ant-dropdown-menu-title-content' and text()='Logout']";
     }
 
-    private void waitForSpinnerToDissapear() {
-        waitForSpinningElementDissapear();
+    private void waitForSpinnerToDisappear() {
+        waitForSpinningElementDisappear();
     }
 
-    public void logoutProcess() throws Exception {
-        waitForSpinnerToDissapear();
+    public void logoutProcess() {
+        waitForSpinnerToDisappear();
         Setup.getActions().moveToElement(getWebElement(By.xpath(getLogOutStep1Xpath()))).click().perform();
         Setup.getActions().moveToElement(getWebElement(By.xpath(getLogOutStep2Xpath()))).click().perform();
     }
 
-    public void goToAccountSettingsView() throws Exception {
-        waitForSpinnerToDissapear();
+    @SuppressWarnings("unused")
+    public void goToAccountSettingsView() {
+        waitForSpinnerToDisappear();
         setElement(By.xpath(getMenuXpath() + getSettingsXpath()));
         getWait().until(ExpectedConditions.presenceOfElementLocated(getElement()));
         WebElement settings = getWebElement(getElement());
@@ -98,7 +98,7 @@ public class GeneralSteps extends PageObject {
         getWait().until(ExpectedConditions.presenceOfElementLocated(getElement()));
         WebElement accountSettings = getWebElement(getElement());
         Setup.getActions().moveToElement(accountSettings).click().perform();
-        waitForSpinnerToDissapear();
+        waitForSpinnerToDisappear();
     }
 
     @Given("The user is in {string} view.")
@@ -116,5 +116,4 @@ public class GeneralSteps extends PageObject {
             vehicleStep.checkPage();
         }
     }
-
 }

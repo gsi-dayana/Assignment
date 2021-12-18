@@ -1,30 +1,23 @@
 package goheavy.vehicles;
 
-import javafx.scene.control.TabPane;
-import org.junit.Assert;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import general.Setup;
 import general.Steps;
-import goheavy.driver.pages.DriverPage;
 import goheavy.vehicles.page.*;
+import org.junit.Assert;
 
 @SuppressWarnings("unused")
 public class VehicleStep extends Steps {
     public VehiclePage vehiclePage;
-    public VehiculeInfoPage vehicleInfo;
-    public VehiculeFeaturesPage vehicleFeture;
+    public VehicleInfoPage vehicleInfo;
+    public VehicleFeaturesPage vehicleFeature;
     public DrivingRequirementsPage drivingRequirements;
     private TabsPage tp;
 
     public VehicleStep() {
         vehiclePage = new VehiclePage();
-        vehicleInfo = new VehiculeInfoPage();
-        vehicleFeture = new VehiculeFeaturesPage();
+        vehicleInfo = new VehicleInfoPage();
+        vehicleFeature = new VehicleFeaturesPage();
         drivingRequirements = new DrivingRequirementsPage();
-
     }
 
     public void checkPage() {
@@ -69,9 +62,9 @@ public class VehicleStep extends Steps {
     public void userInsertsValidDataAndClicksDone() {
 
         try {
-            TabsPage tp = new VehiculeInfoPage();
+            TabsPage tp = new VehicleInfoPage();
             tp.insertValidData();
-            tp = new VehiculeFeaturesPage();
+            tp = new VehicleFeaturesPage();
             tp.insertValidData();
             tp = new DrivingRequirementsPage();
             tp.insertValidData();
@@ -124,6 +117,4 @@ public class VehicleStep extends Steps {
     public void systemDisplaysMessage(String message) {
         vehiclePage.systemDisplaysMessage(message);
     }
-
-
 }

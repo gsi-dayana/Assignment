@@ -1,19 +1,15 @@
 package goheavy.driver;
 
-import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
 import general.PageObject;
-import general.Setup;
 import general.Steps;
 import goheavy.driver.pages.DriverPage;
+import org.junit.Assert;
 
 @SuppressWarnings("unused")
 public class DriverStep extends Steps{
-	private DriverPage driverListPage;
-	private DriverPage driverPage;
-	private PageObject po;
+	private final DriverPage driverListPage;
+	private final DriverPage driverPage;
+	private final PageObject po;
 
 	public DriverStep() {
 		driverListPage = new DriverPage();
@@ -32,9 +28,6 @@ public class DriverStep extends Steps{
 	}
 
 	public void clickOnAddDriver() {
-//		Assert.assertTrue("Add Driver button not found in the view",
-//				po.getWebElement(driverPage.getAddDriverButtonLocator()).isDisplayed());
-//		po.clickOnElement(driverPage.getAddDriverButtonLocator());
 		driverPage.clicksOnAddDriverButton();
 	}
 	public void addDriver() {
@@ -52,5 +45,4 @@ public class DriverStep extends Steps{
 	public void checkDriverListView() {
 		Assert.assertTrue(po.getWebElement(driverListPage.getAddDriverTitleLocator()).isDisplayed());
 	}
-
 }

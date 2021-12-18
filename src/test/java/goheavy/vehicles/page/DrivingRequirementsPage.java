@@ -12,10 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings("unused")
 public class DrivingRequirementsPage extends TabsPage {
 
-    private String vehicleInsuranceImageXpath = "//label[@title='Current Insurance Certificate Picture']/ancestor::" +
-            "div[@class='ant-row ant-form-item']/descendant::input[@type='file']";
     private String stepThreeForm = "//*[@id='step-three-form']/" +
             "ancestor::div[@class='templateStyles__ContentDiv-sc-144t9h2-1 bcVeZj']";
     By getVehicleLicensePlateLocator = By.id("licensePlateStateIssuedId");
@@ -37,7 +36,8 @@ public class DrivingRequirementsPage extends TabsPage {
     }
 
     private String getVehicleInsuranceImageXpath() {
-        return vehicleInsuranceImageXpath;
+        return "//label[@title='Current Insurance Certificate Picture']/ancestor::" +
+                    "div[@class='ant-row ant-form-item']/descendant::input[@type='file']";
     }
 
     public String getStepThreeForm() {
@@ -49,7 +49,7 @@ public class DrivingRequirementsPage extends TabsPage {
     }
 
     public void insertValidData() {
-        setImage(getWebElement(By.xpath(getVehicleInsuranceImageXpath())), null);
+        setImage(getWebElement(By.xpath(getVehicleInsuranceImageXpath())));
 
         clickOn(getWebElement(By.id("verificationDelivery")));
         clickOn(getWebElement(By.id("verificationLicenseTime")));
@@ -85,12 +85,12 @@ public class DrivingRequirementsPage extends TabsPage {
         Setup.getWait().thread(500);
 
         setImage(getWebElement(By.xpath("//label[@title='License Plate Photo']/ancestor::div[contains(@class, "
-                + "'ant-form-item')]/descendant::input[@type='file']")), null);
+                + "'ant-form-item')]/descendant::input[@type='file']")));
 
         Setup.getWait().thread(500);
 
         setImage(getWebElement(By.xpath("//label[@title='Vehicle Registration Sticker']/ancestor::div[contains(@class, "
-                + "'ant-form-item')]/descendant::input[@type='file']")), null);
+                + "'ant-form-item')]/descendant::input[@type='file']")));
 
         Setup.getWait().thread(500);
     }
@@ -107,7 +107,7 @@ public class DrivingRequirementsPage extends TabsPage {
         String by = "insuranceEffectiveDate";
         Setup.getActions().moveToElement(getWebElement(By.id(by))).build().perform();
         Setup.getActions().click(getWebElement(By.id(by))).build().perform();
-        Setup.getActions().sendKeys(getWebElement(By.id(by)), short_date.format(getFaker().date().between(past_date, date)).toString())
+        Setup.getActions().sendKeys(getWebElement(By.id(by)), short_date.format(getFaker().date().between(past_date, date)))
                 .build().perform();
         //Date here
         int min_val = 1;
@@ -126,7 +126,7 @@ public class DrivingRequirementsPage extends TabsPage {
             by = "insuranceExpirationDate";
             Setup.getActions().moveToElement(getWebElement(By.id(by))).build().perform();
             Setup.getActions().click(getWebElement(By.id(by))).build().perform();
-            Setup.getActions().sendKeys(getWebElement(By.id(by)), short_date.format(future_date).toString())
+            Setup.getActions().sendKeys(getWebElement(By.id(by)), short_date.format(future_date))
                     .build().perform();
             manageDate(false, randomNum);
         } catch (Exception e) {
@@ -145,7 +145,6 @@ public class DrivingRequirementsPage extends TabsPage {
             xpath = "/html/body/div[3]/div/div/div/div/div[1]/div[2]/table/tbody/tr[5]/td[6]/div";
             Setup.getActions().moveToElement(getWebElement(By.xpath(xpath))).build().perform();
             Setup.getActions().click(getWebElement(By.xpath(xpath))).build().perform();
-            return;
         } else {
             try {
                 for (int i = 0; i < random_num; i++) {
@@ -182,7 +181,7 @@ public class DrivingRequirementsPage extends TabsPage {
     }
 
     private void checkVehicleLicensePlateComponentBehaviour() {
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         try {
             Setup.getWait().thread(150);
             clickOn(getWebElement(getVehicleLicensePlateLocator));
@@ -198,8 +197,7 @@ public class DrivingRequirementsPage extends TabsPage {
             int number = (int) (Math.random() * val + 1);
             hoverElement(null, element_list.get(number));
             clickOn(element_list.get(number));
-            //Setup.getWait().thread(150);
-        } catch(Exception e) {}
+        } catch(Exception ignored) { }
     }
 
     public boolean systemOpensAddVehicleView() {

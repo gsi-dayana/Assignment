@@ -1,14 +1,14 @@
 package goheavy.vehicles.page;
 
 import org.openqa.selenium.By;
-import general.PageObject;
 import general.Setup;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class VehiculeFeaturesPage extends TabsPage {
+@SuppressWarnings("unused")
+public class VehicleFeaturesPage extends TabsPage {
     private String stepTwoFormScroll = "//*[@id='step-one-form']/ancestor::div["
-            + "@class='templateStyles__ContentDiv-sc-144t9h2-1 bcVeZj']";;
+            + "@class='templateStyles__ContentDiv-sc-144t9h2-1 bcVeZj']";
     private String vehiclePhotoImageXpath;
 
     By vehicleModelLocator = By.id("model");
@@ -22,27 +22,27 @@ public class VehiculeFeaturesPage extends TabsPage {
     By vehicleTransmissionErrorSMSLocator = By.xpath("//input[@id='transmission']"+path);
     DrivingRequirementsPage drivingRequirementsPage;
 
-    public VehiculeFeaturesPage() {
+    public VehicleFeaturesPage() {
         super();
         drivingRequirementsPage = new DrivingRequirementsPage();
-        setVehiclePhotoImageXpath("//input[@type='file']");
-        setStepTwoFormScroll("//*[@id='step-two-form']/ancestor::div[@class='templateStyles__ContentDiv-sc-144t9h2-1 bcVeZj']");
+        setVehiclePhotoImageXpath();
+        setStepTwoFormScroll();
     }
 
     private String getStepTwoFormScroll() {
         return stepTwoFormScroll;
     }
 
-    private void setStepTwoFormScroll(String stepTwoFormScroll) {
-        this.stepTwoFormScroll = stepTwoFormScroll;
+    private void setStepTwoFormScroll() {
+        this.stepTwoFormScroll = "//*[@id='step-two-form']/ancestor::div[@class='templateStyles__ContentDiv-sc-144t9h2-1 bcVeZj']";
     }
 
     private String getVehiclePhotoImageXpath() {
         return vehiclePhotoImageXpath;
     }
 
-    private void setVehiclePhotoImageXpath(String vehiclePhotoImageXpath) {
-        this.vehiclePhotoImageXpath = vehiclePhotoImageXpath;
+    private void setVehiclePhotoImageXpath() {
+        this.vehiclePhotoImageXpath = "//input[@type='file']";
     }
 
     public void insertValidData() {
@@ -63,19 +63,15 @@ public class VehiculeFeaturesPage extends TabsPage {
         sendDataToInput(getWebElement(By.id("transmission")),
                 getFaker().name().firstName(), null, getStepTwoFormScroll());
 
-        if (min_val < 145)
-            clickOn(getWebElement(By.xpath("//label[@title='Towing Kit Installed']/ancestor::" +
-                    "div[@class='ant-row ant-form-item']/descendant::button[@type='button']")));
-
         if (randomNum % 2 == 0)
             clickOn(getWebElement(By.xpath("//label[@title='Liftgate Installed']/ancestor::" +
                     "div[@class='ant-row ant-form-item']/descendant::button[@type='button']")));
 
         scrollToWebElement(null, getStepTwoFormScroll());
-        setImage(getWebElement(By.xpath(getVehiclePhotoImageXpath())), null);
+        setImage(getWebElement(By.xpath(getVehiclePhotoImageXpath())));
 
         clickOn(getWebElement(By.xpath("//button[@type='submit']/descendant::span[text()='Next']")));
-        waitForSpinningElementDissapear();
+        waitForSpinningElementDisappear();
         Setup.getWait().thread(1500);
     }
     public boolean systemOpensAddVehicleView() {
