@@ -36,7 +36,7 @@ public class DriverStep extends Steps{
 	}
 
 	public void checkNewDriver() {
-		driverPage.checkDriverCreation();
+		Assert.assertTrue(driverPage.checkDriverCreation());
 	}
 
 	public void clickOnAddButton() {

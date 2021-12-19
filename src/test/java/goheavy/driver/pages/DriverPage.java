@@ -130,6 +130,7 @@ public class DriverPage extends PageObject {
 				sendDataToInputByWebElement(getWebElement(By.id("lastName")), getFaker().name().lastName());
 				sendDataToInputByWebElement(getWebElement(By.id("experienceYear")),
 						String.valueOf(getFaker().number().numberBetween(3, 8)));
+
 				sendDataToInputByWebElement(getWebElement(By.id("email")), getFaker().internet().emailAddress());
 
 				//Setting GoHeavy Ready Status
@@ -186,7 +187,10 @@ public class DriverPage extends PageObject {
 					InputType.input, true, formId, 40);
 			waitAdditionalShortTime();
 
-			sendDataToInputImproved("Email", getFaker().internet().emailAddress(), null,
+			String email = getFaker().internet().emailAddress();
+			Setup.setKeyValueStore("driver_email", getFaker().internet().emailAddress());
+
+			sendDataToInputImproved("Email", (String) Setup.getValueStore("driver_email"), null,
 					InputType.input, true, formId, 40);
 			waitAdditionalShortTime();
 
@@ -255,20 +259,25 @@ public class DriverPage extends PageObject {
 
 			return true;
 		} catch(Exception e) {
-			System.out.println(e.getMessage());
+			Assert.fail(e.getMessage());
 			return false;
 		}
 	}
 
-	public void checkDriverCreation() {
-		waitForSpinningElementDisappear();
-		String driverName = (String) Setup.getValueStore("driverName");
-		
-		sendDataToInput(getWebElement(searchFieldLocator), driverName, null,null);
-		sendDataToInput(getWebElement(searchFieldLocator), null, Keys.RETURN,null);
+	public boolean checkDriverCreation() {
+		try {
+			waitForSpinningElementDisappear();
+			String driverEmail = (String) Setup.getValueStore("driver_email");
 
-		//Assert.assertEquals("Driver's Name does not match. \nExpected: "+ driverName +
-		//				"\nActual: "+getWebElement(newDriverNameLocator).getAttribute("value"),
-		//		driverName,getWebElement(newDriverNameLocator).getAttribute("value"));
+			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), driverEmail).build().perform();
+			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), Keys.RETURN).build().perform();
+
+			Assert.assertNotNull(getWebElement(By.xpath("//td[text()='" + driverEmail +  "']")));
+
+			return true;
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+			return false;
+		}
 	}
 }
