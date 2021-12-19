@@ -15,3 +15,9 @@ Feature: Add a new Driver
     And clicks on the "Add" button
     Then the system will add the new driver into the Driver List
     And will redirect to the previous view
+
+  Scenario: Add Vehicle 2.2 -- Edit Driver
+    Given The user is in "Drivers List" view.
+    When User clicks on "Edit Driver" button.
+    Then The system opens the "Edit Driver" view.
+    When insert valid data for "Update"

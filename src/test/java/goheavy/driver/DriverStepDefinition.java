@@ -31,6 +31,11 @@ public class DriverStepDefinition {
 		}
 	}
 
+	@When("User clicks on \"Edit Driver\" button.")
+	public void user_click_edit() {
+		driverSteps.userClickEdit();
+	}
+
 	@When("insert valid data for {string}")
 	public void insert_valid_data(String update) {
 		boolean is_update = false;
@@ -68,5 +73,10 @@ public class DriverStepDefinition {
 		} catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
+	}
+
+	@Then("The system opens the \"Edit Driver\" view.")
+	public void system_opens_edit() {
+		driverSteps.systemOpensEdit();
 	}
 }

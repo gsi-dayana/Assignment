@@ -280,4 +280,20 @@ public class DriverPage extends PageObject {
 			return false;
 		}
 	}
+
+	public boolean userClicksUpdate() {
+		try {
+			waitAdditionalShortTime();
+			waitForSpinningElementDisappear();
+			clickOnElement(By.xpath("//span[@role='img' and @class='anticon anticon-edit']"));
+			return true;
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean systemOpensEdit() {
+		return getWebElement(By.xpath("//span[text()='Edit Driver']")).isDisplayed();
+	}
 }

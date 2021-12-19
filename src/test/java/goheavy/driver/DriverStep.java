@@ -46,4 +46,14 @@ public class DriverStep extends Steps{
 	public void checkDriverListView() {
 		Assert.assertTrue(po.getWebElement(driverListPage.getAddDriverTitleLocator()).isDisplayed());
 	}
+
+	public void userClickEdit() {
+		// TODO Auto-generated method stub
+		Assert.assertTrue(driverListPage.userClicksUpdate());
+	}
+
+	public void systemOpensEdit() {
+		// TODO Auto-generated method stub
+		Assert.assertTrue(driverListPage.systemOpensEdit());
+	}
 }
