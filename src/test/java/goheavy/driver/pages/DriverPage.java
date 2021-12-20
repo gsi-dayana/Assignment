@@ -1,9 +1,12 @@
 package goheavy.driver.pages;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
+
 import general.InputType;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -111,150 +114,62 @@ public class DriverPage extends PageObject {
 		formElements.put("dlClassType", getElement("dlClassType"));
 	}
 
-	public boolean insertValidData(boolean update) {
+	public boolean insertValidData() {
 		try {
 			waitForSpinningElementDisappear();
 			waitAdditionalTime();
 
-			String title = "Driver Photo (including shoulders)";
-			setImageImproved(title, null);
-			//acceptImage(title); <- Using in Fleet Owner Driver Creation Process
+			setImageImproved("Driver Photo (including shoulders)", null);
 
 			String formId = "driver-form";
 
-			String name = getFaker().name().firstName();
-			Setup.setKeyValueStore("driverName", name);
+			String firstName = getFaker().name().firstName();
+			Setup.setKeyValueStore("driverName", firstName);
+			sendDataToInput(getElement("firstName"), Setup.getValueStore("driverName"), null, getForm());
 
-			if (update) {
-				sendDataToInputByWebElement(getWebElement(By.id("firstName")), (String) Setup.getValueStore("driverName"));
-				sendDataToInputByWebElement(getWebElement(By.id("lastName")), getFaker().name().lastName());
-				sendDataToInputByWebElement(getWebElement(By.id("experienceYear")),
-						String.valueOf(getFaker().number().numberBetween(3, 8)));
+			String lastName = getFaker().name().lastName();
+			Setup.setKeyValueStore("driverLastName", lastName);
+			sendDataToInput(getElement("lastName"),Setup.getValueStore("driverLastName"), null, getForm());
 
-				sendDataToInputByWebElement(getWebElement(By.id("email")), getFaker().internet().emailAddress());
-
-				//Setting GoHeavy Ready Status
-				Setup.getActions().moveToElement(getWebElement(By.xpath("//input[@id='status']"))).build().perform();
-				waitAdditionalShortTime();
-				Setup.getActions().click(getWebElement(By.xpath("//input[@id='status']"))).build().perform();
-				waitAdditionalShortTime();
-				Setup.getActions().moveToElement(getWebElement(By.xpath("//div[text()='GoHeavy Ready']"))).build().perform();
-				waitAdditionalShortTime();
-				Setup.getActions().click(getWebElement(By.xpath("//div[text()='GoHeavy Ready']"))).build().perform();
-
-				sendDataToInputByWebElement(getWebElement(By.id("address")), getFaker().address().streetName());
-				sendDataToInputByWebElement(getWebElement(By.id("addressCity")), getFaker().address().cityName());
-
-				formScrollImproved(formId, Integer.parseInt(Setup.getTimeouts().get("pageLoad").toString()));
-
-				title = "Driver's License Photo (Front)";
-				setImageImproved(title, null);
-				title = "Driver's License Photo (Back)";
-				setImageImproved(title, null);
-
-				String xpath = "//*[@type='submit']";
-				Setup.getActions().click(getWebElement(By.xpath(xpath))).build().perform();
-			}
-
-			sendDataToInputImproved("First Name", (String) Setup.getValueStore("driverName"), null,
-					InputType.input, true, formId, 40);
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			sendDataToInput(getElement("birthAt"), formatter.format(getFaker().date().birthday(21, 80)), null, getForm());
+			sendDataToInput(getElement("birthAt"), null, Keys.RETURN, getForm());
 			waitAdditionalShortTime();
-
-			sendDataToInputImproved("Last Name", getFaker().name().lastName(), null,  InputType.input, true, formId, 40);
+			sendDataToInput(getElement("experienceYear"), String.valueOf(getFaker().number().numberBetween(3, 6)), null, getForm());
+			scrollToWebElement(getWebElement(By.id("mobilePhone")), "//div[contains(@class, 'ContentDiv')]");
+			sendDataToInput(getElement("mobilePhone"), getFaker().phoneNumber().cellPhone(), null, getForm());
 			waitAdditionalShortTime();
-
-			int min_val = 22;
-			int max_val = 55;
-
-			ThreadLocalRandom tlr = ThreadLocalRandom.current();
-			int randomNum = tlr.nextInt(min_val, max_val + 1);
-
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-			String date_compare = dtf.format(LocalDateTime.now().plusYears(randomNum * -1));
-
-			sendDataToInputImproved("Birth Date", date_compare, null,
-					InputType.input, true, formId, 40);
+			sendDataToInput(getElement("email"), getFaker().internet().emailAddress(), null, getForm());
 			waitAdditionalShortTime();
-			sendDataToInputImproved("Birth Date", null, Keys.RETURN,
-					InputType.input, true, formId, 40);
-			waitAdditionalShortTime();
-
-			sendDataToInputImproved("Experience", String.valueOf(getFaker().number().numberBetween(3, 8)), null,
-					InputType.input, true, formId, 40);
-			waitAdditionalShortTime();
-
-			sendDataToInputImproved("Mobile", "53" + getFaker().number().digits(8), null,
-					InputType.input, true, formId, 40);
-			waitAdditionalShortTime();
-
-			String email = getFaker().internet().emailAddress();
-			Setup.setKeyValueStore("driver_email", getFaker().internet().emailAddress());
-
-			sendDataToInputImproved("Email", (String) Setup.getValueStore("driver_email"), null,
-					InputType.input, true, formId, 40);
-			waitAdditionalShortTime();
-
 			scrollToWebElement(getWebElement(By.id("tShirtSize")), "//div[contains(@class, 'ContentDiv')]");
-
-			//tShirtSize
-			//tShirtSize_list
 			interactAndRandomSelectFromDropDown("tShirtSize", "tShirtSize_list");
-
-			sendDataToInputImproved("Address", getFaker().address().streetName(), null,  InputType.textarea, true, formId, 210);
+			scrollToWebElement(getWebElement(By.id("address")), "//div[contains(@class, 'ContentDiv')]");
+			sendDataToInput(getElement("address"), getFaker().address().streetAddress() + getFaker().address().streetAddressNumber() + getFaker().address().streetName(), null, getForm());
 			waitAdditionalShortTime();
-
-			sendDataToInputImproved("ZIP Code", getFaker().address().zipCode(), null,  InputType.input, true, formId, 210);
+			sendDataToInput(getElement("addressZipCode"), getFaker().address().zipCode(), null, getForm());
 			waitAdditionalShortTime();
-
-			sendDataToInputImproved("City", getFaker().address().cityName(), null,  InputType.input, true, formId, 210);
+			sendDataToInput(getElement("addressCity"), getFaker().address().city(), null, getForm());
 			waitAdditionalShortTime();
 
 			scrollToWebElement(getWebElement(By.id("addressStateId")), "//div[contains(@class, 'ContentDiv')]");
 
-			//Setup.getWait().thread(60000);
-
-			//addressStateId
-			//addressStateId_list
 			interactAndRandomSelectFromDropDown("addressStateId", "addressStateId_list");
 
-			//Driver's License Photo (Front)
-			title = "Driver's License Photo (Front)";
-			setImageImproved(title, null);
+			setImageImproved("Driver's License Photo (Front)", null);
 
-			//Driver's License Photo (Back)
-			title = "Driver's License Photo (Back)";
-			setImageImproved(title, null);
+			setImageImproved("Driver's License Photo (Back)", null);
 
-			sendDataToInputImproved("Driver's License (DL) Number", "1" + getFaker().number().digits(6), null,
-					InputType.input, true, formId, 40);
+			scrollToWebElement(getWebElement(By.id("dlNumber")), "//div[contains(@class, 'ContentDiv')]");
+			sendDataToInput(getElement("dlNumber"), getFaker().number().digits(7), null, getForm());
 			waitAdditionalShortTime();
 
-			min_val = 2;
-			max_val = 5;
-
-			randomNum = tlr.nextInt(min_val, max_val + 1);
-
-			dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-			date_compare = dtf.format(LocalDateTime.now().plusMonths((randomNum * -1)));
-
-			sendDataToInputImproved("DL Issued Date", date_compare, null,
-					InputType.input, true, formId, 40);
+			sendDataToInput(getElement("dlIssuedDate"), formatter.format(getFaker().date().past(2, TimeUnit.DAYS)), null, getForm());
+			sendDataToInput(getElement("dlIssuedDate"), null, Keys.RETURN, getForm());
 			waitAdditionalShortTime();
-			sendDataToInputImproved("DL Issued Date", null, Keys.RETURN,
-					InputType.input, true, formId, 40);
 
-			date_compare = dtf.format(LocalDateTime.now().plusMonths((randomNum)));
+			sendDataToInput(getElement("dlExpirationDate"), formatter.format(getFaker().date().future(3, TimeUnit.DAYS)), null, getForm());
+			sendDataToInput(getElement("dlExpirationDate"), null, Keys.RETURN, getForm());
 
-			sendDataToInputImproved("DL Expiration Date", date_compare, null,
-					InputType.input, true, formId, 40);
-			waitAdditionalShortTime();
-			sendDataToInputImproved("DL Expiration Date", null, Keys.RETURN,
-					InputType.input, true, formId, 40);
-
-			//scrollToWebElement(null, "//div[contains(@class, 'ContentDiv')]");
-
-			//dlClassType
-			//dlClassType_list
 			interactAndRandomSelectFromDropDown("dlClassType", "dlClassType_list");
 
 			return true;
@@ -267,12 +182,12 @@ public class DriverPage extends PageObject {
 	public boolean checkDriverCreation() {
 		try {
 			waitForSpinningElementDisappear();
-			String driverEmail = (String) Setup.getValueStore("driver_email");
+			String fullName = Setup.getValueStore("driverName") + " " + Setup.getValueStore("driverLastName");
 
-			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), driverEmail).build().perform();
+			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), fullName).build().perform();
 			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), Keys.RETURN).build().perform();
 
-			Assert.assertNotNull(getWebElement(By.xpath("//td[text()='" + driverEmail +  "']")));
+			Assert.assertNotNull(getWebElement(By.xpath("//td[text()='" + fullName +  "']")));
 
 			return true;
 		} catch (Exception e) {
@@ -281,19 +196,4 @@ public class DriverPage extends PageObject {
 		}
 	}
 
-	public boolean userClicksUpdate() {
-		try {
-			waitAdditionalShortTime();
-			waitForSpinningElementDisappear();
-			clickOnElement(By.xpath("//span[@role='img' and @class='anticon anticon-edit']"));
-			return true;
-		} catch (Exception e) {
-			Assert.fail(e.getMessage());
-			return false;
-		}
-	}
-
-	public boolean systemOpensEdit() {
-		return getWebElement(By.xpath("//span[text()='Edit Driver']")).isDisplayed();
-	}
 }

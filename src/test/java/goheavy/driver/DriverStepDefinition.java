@@ -31,23 +31,14 @@ public class DriverStepDefinition {
 		}
 	}
 
-	@When("User clicks on \"Edit Driver\" button.")
-	public void user_click_edit() {
-		driverSteps.userClickEdit();
-	}
-
-	@When("insert valid data for {string}")
-	public void insert_valid_data(String update) {
-		boolean is_update = false;
-		if (update.equals("Update"))
-			is_update = true;
+	@When("user inserts valid data")
+	public void insert_valid_data() {
 		try {
-			driverSteps.addDriver(is_update);
+			driverSteps.addDriver();
 		} catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
 	}
-
 	@When("clicks on the \"Add\" button")
 	public void clicks_on_button() {
 		try {
@@ -74,9 +65,9 @@ public class DriverStepDefinition {
 			Assert.fail(e.getMessage());
 		}
 	}
-
-	@Then("The system opens the \"Edit Driver\" view.")
-	public void system_opens_edit() {
-		driverSteps.systemOpensEdit();
-	}
+//
+//	@Then("The system opens the \"Edit Driver\" view.")
+//	public void system_opens_edit() {
+//		driverSteps.systemOpensEdit();
+//	}
 }

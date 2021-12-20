@@ -31,8 +31,8 @@ public class DriverStep extends Steps{
 		driverPage.clicksOnAddDriverButton();
 	}
 
-	public void addDriver(boolean update) {
-		Assert.assertTrue(driverPage.insertValidData(update));
+	public void addDriver() {
+		Assert.assertTrue(driverPage.insertValidData());
 	}
 
 	public void checkNewDriver() {
@@ -47,13 +47,4 @@ public class DriverStep extends Steps{
 		Assert.assertTrue(po.getWebElement(driverListPage.getAddDriverTitleLocator()).isDisplayed());
 	}
 
-	public void userClickEdit() {
-		// TODO Auto-generated method stub
-		Assert.assertTrue(driverListPage.userClicksUpdate());
-	}
-
-	public void systemOpensEdit() {
-		// TODO Auto-generated method stub
-		Assert.assertTrue(driverListPage.systemOpensEdit());
-	}
 }
