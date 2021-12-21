@@ -83,6 +83,8 @@ public class DriverPage extends PageObject {
 
 			String firstName = getFaker().name().firstName();
 			Setup.setKeyValueStore("driverName", firstName);
+			Assert.assertEquals("Placeholder in the First Name field is not the expected one",
+					"Enter First Name",getElement("firstName").getAttribute("placeholder"));
 			sendDataToInput(getElement("firstName"), Setup.getValueStore("driverName"), null, getForm());
 
 			String lastName = getFaker().name().lastName();
@@ -141,8 +143,6 @@ public class DriverPage extends PageObject {
 		try {
 			waitForSpinningElementDisappear();
 			setFullName(Setup.getValueStore("driverName") + " " + Setup.getValueStore("driverLastName"));
-			//fullName = Setup.getValueStore("driverName") + " " + Setup.getValueStore("driverLastName");
-
 			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), getFullName()).build().perform();
 			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), Keys.RETURN).build().perform();
 
