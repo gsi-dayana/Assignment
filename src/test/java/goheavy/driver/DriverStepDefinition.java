@@ -4,7 +4,6 @@ import io.cucumber.java.en.*;
 import general.*;
 import org.junit.Assert;
 
-@SuppressWarnings("unused")
 public class DriverStepDefinition {
 	private final DriverStep driverSteps;
 
@@ -51,7 +50,7 @@ public class DriverStepDefinition {
 	@Then("the system will add the new driver into the Driver List")
 	public void the_system_will_add_the_new_driver_into_the_driver_list() {
 		try {
-			driverSteps.checkNewDriver();
+			driverSteps.checkDriverCreated();
 		} catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
@@ -65,9 +64,14 @@ public class DriverStepDefinition {
 			Assert.fail(e.getMessage());
 		}
 	}
-//
-//	@Then("The system opens the \"Edit Driver\" view.")
-//	public void system_opens_edit() {
-//		driverSteps.systemOpensEdit();
-//	}
+
+	@And("will clicks on the Document icon")
+	public void will_Clicks_On_The_Document_Icon() {
+		try{
+			driverSteps.clickDriverDocument();
+		}  catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
 }

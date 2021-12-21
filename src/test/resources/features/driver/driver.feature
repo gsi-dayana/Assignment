@@ -15,4 +15,5 @@ Feature: Add a new Driver
     And clicks on the "Add" button
     Then the system will add the new driver into the Driver List
     And will redirect to the previous view
+    And will clicks on the Document icon
 

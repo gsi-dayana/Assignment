@@ -1,13 +1,8 @@
 package goheavy.driver.pages;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-
-import general.InputType;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -15,11 +10,8 @@ import org.openqa.selenium.WebElement;
 import general.PageObject;
 import general.Setup;
 
-@SuppressWarnings("unused")
 public class DriverPage extends PageObject {
-	private final By menuDriversLinkLocator = By.xpath("//span[text()='Drivers']/ancestor::span[@class='ant-menu-title-content']");
 	private final By addDriverButtonLocator = By.xpath("//span[text()='Add Driver']/ancestor::button[@class='ant-btn ant-btn-primary']");
-	private final By addDriverTitleLocator = By.xpath("//span[text()='Add Driver']/ancestor::div[@class='ant-row ant-row-space-between ant-row-middle']");
 	private final HashMap<String, WebElement> formElements;
 	By driverPhotoLocator = By.xpath("//label[contains(text(),'shoulders')]/" +
 			"ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']");
@@ -32,12 +24,21 @@ public class DriverPage extends PageObject {
 	By searchFieldLocator = By.xpath("//input[@placeholder='Search...']");
 	By newDriverNameLocator = By.xpath("//td[@class='ant-table-cell'][2]");
 	String form;
+	String fullName;
 
 	public DriverPage() {
 		super();
 		this.urlPath = "/driver";
 		formElements = new HashMap<>();
 		setForm("//form[@id='driver-form']");
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getForm() {
@@ -48,29 +49,11 @@ public class DriverPage extends PageObject {
 		this.form = form;
 	}
 
-	public By getMenuDriversLinkLocator() {
-		return menuDriversLinkLocator;
-	}
 
 	public By getAddDriverButtonLocator() {
 		return addDriverButtonLocator;
 	}
 
-	public By getAddDriverTitleLocator() {
-		return addDriverTitleLocator;
-	}
-
-	public boolean goToView() {
-		try {
-			waitForSpinningElementDisappear();
-			//waitAdditionalTime();
-			clickOnElement(menuDriversLinkLocator);
-			return true;
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-			return false;
-		}
-	}
 	
 	public void waitAdditionalTime() {
 		Setup.getWait().thread(1500);
@@ -87,31 +70,6 @@ public class DriverPage extends PageObject {
 			waitAdditionalTime();
 			clickOnElement(addDriverButtonLocator);
 		} catch (Exception ignored) { }
-	}
-
-	public void getFormElements() {
-		formElements.put("driverPhoto",getWebElement(By.xpath("//label[contains(text(),'shoulders')]/" +
-				"ancestor::div[@class='ant-row ant-form-item']/descendant::input[@type='file']")));
-		formElements.put("firstName", getElement("firstName"));
-		formElements.put("lastName", getElement("lastName"));
-		formElements.put("birthAt", getElement("birthAt"));
-		formElements.put("experienceYear", getElement("experienceYear"));
-		formElements.put("mobilePhone", getElement("mobilePhone"));
-		formElements.put("email", getElement("email"));
-		formElements.put("address", getElement("address"));
-		formElements.put("addressCity", getElement("addressCity"));
-		formElements.put("addressStateId", getElement("addressStateId"));
-		formElements.put("addressCountryId", getElement("addressCountryId"));
-		formElements.put("addressZipCode", getElement("addressZipCode"));
-		formElements.put("state", getElement("addressStateId"));
-		formElements.put("driverLicenseFront",getWebElement(By.xpath("//label[contains(@title,'(Front)')]/"
-				+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']")));
-		formElements.put("driverLicenseBack",getWebElement(By.xpath("//label[contains(@title,'(Back)')]/"
-				+ "ancestor::div[contains(@class,'ant-form-item')]/descendant::input[@type='file']")));
-		formElements.put("dlNumber", getElement("dlNumber"));
-		formElements.put("dlIssuedDate", getElement("dlIssuedDate"));
-		formElements.put("dlExpirationDate", getElement("dlExpirationDate"));
-		formElements.put("dlClassType", getElement("dlClassType"));
 	}
 
 	public boolean insertValidData() {
@@ -179,15 +137,16 @@ public class DriverPage extends PageObject {
 		}
 	}
 
-	public boolean checkDriverCreation() {
+	public boolean searchDriverCreated() {
 		try {
 			waitForSpinningElementDisappear();
-			String fullName = Setup.getValueStore("driverName") + " " + Setup.getValueStore("driverLastName");
+			setFullName(Setup.getValueStore("driverName") + " " + Setup.getValueStore("driverLastName"));
+			//fullName = Setup.getValueStore("driverName") + " " + Setup.getValueStore("driverLastName");
 
-			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), fullName).build().perform();
+			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), getFullName()).build().perform();
 			Setup.getActions().sendKeys(getWebElement(searchFieldLocator), Keys.RETURN).build().perform();
 
-			Assert.assertNotNull(getWebElement(By.xpath("//td[text()='" + fullName +  "']")));
+			Assert.assertNotNull(getWebElement(By.xpath("//td[text()='" + getFullName() +  "']")));
 
 			return true;
 		} catch (Exception e) {
@@ -195,5 +154,6 @@ public class DriverPage extends PageObject {
 			return false;
 		}
 	}
+
 
 }

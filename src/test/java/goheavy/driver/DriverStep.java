@@ -1,26 +1,30 @@
 package goheavy.driver;
 
 import general.PageObject;
+import general.Setup;
 import general.Steps;
+import goheavy.driver.pages.DriverListPage;
 import goheavy.driver.pages.DriverPage;
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 @SuppressWarnings("unused")
 public class DriverStep extends Steps{
-	private final DriverPage driverListPage;
 	private final DriverPage driverPage;
+	private final DriverListPage driverListPage;
 	private final PageObject po;
 
 	public DriverStep() {
-		driverListPage = new DriverPage();
 		driverPage = new DriverPage();
+		driverListPage = new DriverListPage();
 		po = new PageObject();
 	}
 
 	public void checkPage() {
-		String path = driverListPage.getPagePath().toLowerCase();
+		String path = driverPage.getPagePath().toLowerCase();
 		Assert.assertTrue(" The path provided is not correct in the url. path: " + path,
-				driverListPage.getCurrentUrl().toLowerCase().contains(path));
+				driverPage.getCurrentUrl().toLowerCase().contains(path));
 	}
 
 	public void goToView() {
@@ -35,8 +39,8 @@ public class DriverStep extends Steps{
 		Assert.assertTrue(driverPage.insertValidData());
 	}
 
-	public void checkNewDriver() {
-		Assert.assertTrue(driverPage.checkDriverCreation());
+	public void checkDriverCreated() {
+		Assert.assertTrue(driverPage.searchDriverCreated());
 	}
 
 	public void clickOnAddButton() {
@@ -44,7 +48,14 @@ public class DriverStep extends Steps{
 	}
 
 	public void checkDriverListView() {
-		Assert.assertTrue(po.getWebElement(driverListPage.getAddDriverTitleLocator()).isDisplayed());
+		Assert.assertTrue(driverListPage.checkDriverListView());
 	}
 
+	public void clickDriverDocument() {
+		String path = "//td[text()='"+ driverPage.getFullName() +"']/ancestor::tr/descendant::span[@class='anticon anticon-file-text']";
+		WebElement doc = po.getWebElement(By.xpath(path));
+		Setup.getActions().click(doc).build().perform();
+		Assert.assertTrue("Driver Documents page not found",
+				po.getWebElement(By.xpath("//span[contains(@class,'iaAGQP')]")).getAttribute("value").contains("Documents for "+ driverPage.getFullName()));
+	}
 }
